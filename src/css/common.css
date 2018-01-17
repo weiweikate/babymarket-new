@@ -1,0 +1,331 @@
+body{
+  background: #f5f5f5;
+  font-family:"PingFang-SC-Medium";
+  margin:0;
+  padding:0;
+  height: 100%;
+  overflow:auto;
+}
+.bgColor{
+  background: #fff;
+}
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, p, img{
+  margin:0;
+  padding:0;
+}
+input, textarea, select {
+  margin:0;
+  padding:0;
+  border:0;
+  font-size:12px;
+  font-family:"PingFang-SC-Medium";
+}
+img { border:0; }
+ol, ul, li { list-style:none; }
+a{ text-decoration:none;}
+.fl{
+  float: left;
+}
+.fr{
+  float: right;
+}
+#scrollView>div{
+  margin-top: .894rem;
+  padding-bottom: 1.2rem
+}
+.yd-dialog-black-mask .yd-confirm{
+  width:70%;
+  font-size:0.35rem;
+  border-radius: 0.3rem;
+}
+.yd-confirm .yd-confirm-hd{
+  text-align: center;
+}
+.yd-dialog-black-mask .yd-confirm-ft>a.primary,.yd-dialog-black-mask .yd-confirm-ft>a.default{
+  color:#715329;
+  padding:0 !important;
+}
+.yd-dialog-black-mask .yd-confirm-ft>a.default,.yd-dialog-black-mask .yd-confirm-ft>a.primary{
+  padding: 0.1rem 0;
+}
+.yd-dialog-black-mask .yd-confirm-bd {
+  padding: 0.2rem;
+  font-size: 0.35rem;
+  color: #000;
+  text-align: center;
+}
+#opt,#app .opt{
+  position: absolute;
+  top: 0;
+  right: 0.25rem;
+  font-size: 0.3rem;
+}
+.prdIntr .priceDiv span{
+  display: block;
+  font-size: 0.3rem;
+}
+.prdIntr .priceDiv span.AccPrice{
+  color:#BD0E00;
+}
+.prdIntr .priceDiv span.LYPrice{
+  color:#C5A563;
+}
+.prdIntr .priceDiv span.SalePrice{
+  color:#818181;
+  text-decoration: line-through;
+}
+.orderDetail .address{
+  font-size:.32rem;
+  padding:.3rem .24rem;
+  padding-left: .8rem;
+  position: relative;
+  background: #fff url("../img/position.png") no-repeat .2rem center;
+  background-size:.4rem ;
+  margin-bottom: .24rem;
+  text-align: left;
+}
+.orderDetail .address p{
+  overflow: hidden;
+}
+.orderDetail .addressInfo{
+  padding:.24rem .4rem .24rem 0 ;
+  text-align: left;
+  display: inline-block;
+}
+.orderDetail .addressInfo:after,.pLogistics:after{
+  margin-left: .05rem;
+  margin-right: -.08rem;
+  display: block;
+  font-family: YDUI-INLAY;
+  font-size: .4rem;
+  color: #c9c9c9;
+  content: "\E608";
+  position: absolute;
+  top: 42%;
+  right:.2rem;
+}
+.orderDetail .demo-checklist-img {
+  width: 1.1rem;
+  height:1.1rem;
+  margin-right:0.25rem;
+}
+.orderDetail .productInfo{
+  height: 1.75rem;
+  box-sizing: border-box;
+  background: #fff;
+  border-bottom: 1px solid #dcdedf;
+  margin-bottom: .2rem;
+  padding:.3rem .24rem ;
+  text-align: left;
+}
+.orderDetail .productInfo p{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin-right: .1rem;
+}
+.orderDetail .pay li{
+  overflow: hidden;
+  padding:0 .24rem;
+  height:.86rem;
+  line-height: .86rem;
+  border-bottom: 1px solid #ddd;
+  background: #fff;
+  text-align: left;
+}
+.orderDetail .pay p{
+  text-align: left;
+  padding:0 .24rem;
+  margin-bottom: .24rem;
+  color: #7d7f81;
+}
+.subBtn{
+  display: inline-block;
+  width:90%;
+  height: .8rem;
+  line-height: .8rem;
+  text-align: center;
+  color: #fff;
+  background:#af8327 ;
+  border-radius:.15rem;
+  font-size: .32rem;
+  border:0;
+}
+/*返回箭头*/
+.back{
+  position: absolute;
+  left: 0.1rem;
+  top: -0.04rem;
+}
+.back img{
+  height: 0.4rem;
+  vertical-align: middle;
+}
+/*注册 找回密码输入框*/
+.resetPasswordPage input,.registerPage input{
+  width: 90%;
+  height: .9rem;
+  line-height: .9rem;
+  border: 1px solid #ddd;
+  border-radius: .15rem;
+  padding-left: .4rem;
+  outline: 0;
+}
+button:disabled {
+  background:#ccc;
+  border: 0;
+}
+.putPhone,.code,.code p{
+  width:90%;
+  margin: auto;
+  text-align: center;
+}
+.code p{
+  text-align: left;
+  font-size: .26rem;
+}
+.resetPasswordPage .yd-btn,.registerPage .yd-btn{
+  height: .89rem;
+  line-height: .89rem;
+  box-sizing: border-box;
+  width: 2rem;
+  font-size: .24rem;
+  position: absolute;
+  top: 0rem;
+  right: 5%;
+  padding:0;
+}
+.putPhone input{
+  margin-bottom: .4rem;
+}
+.codeDiv{
+  position: relative;
+  margin:.4rem auto;
+}
+.resetPasswordPage .yd-btn-primary,.registerPage .yd-btn-primary {
+  background-color: #af8327;
+}
+.resetPasswordPage .yd-cell:after,.registerPage .yd-cell:after{
+  border-bottom:0
+}
+.resetPasswordPage,.registerPage{
+  text-align: left;
+  padding-top: .8rem;
+  font-size: .28rem;
+}
+.resetPwd{
+  width:81%;
+  margin: auto;
+}
+.resetPwd .subBtn{
+  width: 100%;
+}
+.resetPwd p{
+  margin-bottom: .3rem;
+  text-align: left;
+  font-size:.3rem;
+}
+.totalCommission{
+  height: 2.34rem;
+  background: #715329;
+  color: #fff;
+  font-size: .56rem;
+  text-align: left;
+  padding-top: .6rem;
+  box-sizing: border-box;
+}
+.commission>div{
+  min-height: .75rem;
+  line-height: .75rem;
+  background: #fff;
+  padding: 0 .2rem;
+  font-size: .26rem;
+}
+.totalCommission>div{
+  font-size: .24rem;
+  color: #a89477;
+  padding-left: .2rem;
+  margin-bottom: .25rem;
+}
+.totalCommission>span{
+  padding-left: .3rem;
+}
+.commission .yd-flexbox-item:first-child{
+  text-align: left;
+  color: #5e6064;
+}
+.commission .yd-flexbox-item:last-child{
+  text-align: right;
+  color: #b0b1b3;
+}
+.demo-checklist-img{
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid #ddd;
+  margin-right: 0.25rem;
+}
+/*登录文本框*/
+.login  .g-form-input{
+  margin-bottom: 0.25rem;
+}
+.login .g-form-input input{
+  width: 100%;
+  background:#dcdedf ;
+  height:0.9rem;
+  line-height: 0.9rem;
+  padding-left:0.15rem;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #dcdedf;
+}
+.login .g-form-input a.button{
+  display: inline-block;
+  width: 100%;
+  height: 0.9rem;
+  line-height: 0.9rem;
+  text-align: center;
+  color: #fff;
+  background: #715329;
+  font-size: 18px;
+  border-radius: 4px;
+}
+/*重写我的订单和index的二级导航栏*/
+.itemDiv .yd-tab{
+  padding-top: .82rem;
+}
+.itemDiv .yd-tab-nav{
+  position: -webkit-sticky;
+  /*position: sticky;*/
+  position: fixed;
+  top: .89rem;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+}
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+
+}
+.itemDiv .yd-tab-nav-item{
+  height: .85rem;
+}
+.itemDiv .yd-tab-nav-item a{
+  background: #fff;
+}
+.yd-flexview{
+  max-width: 100% !important;
+  min-width: 100% !important;
+  width: 100%;
+}
+/*判断是不是平板或者屏幕小于768px*/
+@media all and (max-width: 768px) {
+  body:after {
+    content: 'smallscreen';
+    display: none;
+  }
+}
