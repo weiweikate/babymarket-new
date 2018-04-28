@@ -1,5 +1,5 @@
 <template>
- <div style="height: 100%" class="index">
+ <div style="height: 100%">
    <yd-layout >
      <v-topbar :title="titleAttr"  slot="navbar">
        <router-link :to="{path:'/search'}">
@@ -15,44 +15,31 @@
            <yd-tab-panel v-for="(item,index) in topBar0" :label="item.Name" :tabkey="item.Id" :key="index">
              <div v-if="index === 0">
                <!-- 首页轮播-->
-               <v-slider :getSubPagePics="indexPics" ></v-slider>
+               <v-slider :getSubPagePics="indexPics"></v-slider>
                <!-- 码头快报-->
                <div class="notice" style="text-align: left">
                  <div>码头<span>快报</span></div>
-                 <p v-if="LYnotice.Title" @click="clickedJumpPage(LYnotice)">
-                   {{LYnotice.Title}}
+                 <p>
+                   <router-link :to="{path:'/prdDetail',query:{prdId:LYnotice.prdId}}">{{LYnotice.prdName}}</router-link>
                  </p>
                </div>
-               <!-- 为你推荐-->
-               <div class="indexType recommend" v-for="(hotReads,index) in hotReadList" :key="index" >
-                 <p>—— {{hotReads.Name}} ——</p>
-                 <ul>
-                   <li v-for="(hotRead,hotReadIndex) in hotReads.SelectDetail" :key="hotReadIndex" @click="clickedJumpPage(hotRead)">
-                     <img v-lazy='getIndexPic(hotRead.ImgId)' alt=""/>
-                   </li>
-                 </ul>
+               <!-- 展示图片 不轮播-->
+               <div v-for="(indexBelowShow,index) in indexBelowShows" :key="index">
+                 <div @click="goDetailPage(indexBelowShow.ProductId,indexBelowShow.ImgId)">
+                   <img :src="getIndexPic(indexBelowShow.ImgId)" width="100%" style="margin-top:0.25rem" alt=""/>
+                 </div>
                </div>
-               <!-- 专题精选-->
-               <div class="indexType">
-                  <p>—— 专题惊选 ——
-                    <span>
-                      <router-link :to="{path: '/topic'}">更多>></router-link>
-                    </span>
-                  </p>
-                 <v-topic-items v-for="(topicList,index) in topicLists"
-                                 :key="index" :topicList="topicList" :userInfos="userInfos">
-                 </v-topic-items>
-               </div>
+               <!-- 老友爆款-->
+               <!--<v-product-info-bk :getBKPrdInfos=" BKlists" :otherAtrr="LYBK"></v-product-info-bk>-->
+               <!--首页列表展示 -->
+               <v-product-info :getSubPrdInfos="lists" :otherAtrr="showMoreAtrr"></v-product-info>
              </div>
-             <div v-else-if="item.Name == '众筹'">
-               <v-crowdfunding-list :crowdfundingList="subPrdInfos[index-1]"></v-crowdfunding-list>
-             </div>
-             <div v-else>
+             <div v-else="index !== 0">
                <!-- 二级标题页面轮播-->
-               <v-slider :getSubPagePics="subPagePics[index-1]" ></v-slider>
+               <v-slider :getSubPagePics="subPagePics[index-1]"></v-slider>
                <!-- 二级标题产品展示-->
                <v-product-info :getSubPrdInfos="subPrdInfos[index-1]" :otherAtrr="showMoreAtrr">
-                 <v-icon :icons="iconId[index-1]" ></v-icon>
+                 <v-icon :icons="iconId" ></v-icon>
                </v-product-info>
              </div>
            </yd-tab-panel>
@@ -66,36 +53,34 @@
 </template>
 
 <script>
-  import VTopicItems from '../base/topicItems.vue'
-  import VCrowdfundingList from '../base/crowdfundingList.vue'
   import VIcon from '../base/icon.vue'
   import VSlider from '../base/slider.vue'
   import VProductInfo from '../base/productInfo.vue'
+  import VProductInfoBk from '../base/productInfoBk.vue'
   import VTopbar from '../base/topBar.vue'
   import VNavbar from '../base/navBar.vue'
   import { mapMutations } from 'vuex'
-  import { _readURL, _prdType, _LYnotice, _prdLabel, _prdTarget,_picBelowShow, _prdInfo, _topic, _hotRead } from '../../common/request.js'
-  import { isLogin, myMixinClickedJump} from '../../common/index.js'
+  import { _readURL, _prdType, _LYnotice, _prdLabel, _prdTarget,_picBelowShow, _prdInfo } from '../../common/request.js'
+  import { isLogin, getImgs} from '../../common/index.js'
   export default {
-    mixins: [myMixinClickedJump],
     data () {
       return {
         titleAttr: {'isShow': false, 'name': '老友码头'},
         topBar0: [], // tab路面标题
         lists: [], // 首页的产品信息
+        BKlists:[], // 老友爆款产品
         subPrdInfos: [], // 二级标题产品信息
-        crowdfundingProducts:[],// 众筹项目
-        userInfos:{}, // 用户信息
+        readUrl: '',
+        userInfos:'', // 用户信息
         indexPics:[], // 主页轮播
         subPagePics:[], // 二级标题轮播图片
         indexBelowShows:[],// 海报
-        LYnotice:{}, // 老友快报
+        LYnotice: {prdName:'',prdId:''}, // 老友快报
+        LYBK:{ prdId:'', name: '',theme:'4',isLogin:false,type:''},
         times: [], // tab栏目被点击的次数 二次点击的时候不请求
         showMoreAtrr: {theme: 2,show: true,isLogin: false,type:''},
         outIndex: false, // 是否跳转到更多产品的页面
         iconId:[],// 保存icon图标
-        topicLists:[], // 首页专题精选
-        hotReadList:'',// 首页为你推荐等精选
       }
     },
     components: {
@@ -103,9 +88,8 @@
       VNavbar,
       VSlider,
       VProductInfo,
-      VIcon,
-      VTopicItems,
-      VCrowdfundingList
+      VProductInfoBk,
+      VIcon
     },
     beforeRouteLeave (to, from, next) {
       if(to.name==='prdMore'){
@@ -115,7 +99,7 @@
         if(to.query.theme){
           this.getLYexplosion()
         }else{
-          this.getSubInfoShow(this.userInfos.reqUrl,to.query.prdId)
+          this.getSubInfoShow(this.readUrl,to.query.prdId)
         }
         next()
       }else{
@@ -133,10 +117,8 @@
       this.getIndexPrdItem()
       //获取码头快报
       this.getLYnotice()
-      // 获取首页精选推荐
-      this.getHotread()
-      //获取首页专题介绍
-      this.getTopicInfos()
+      //获取老友爆款
+      //this.getLYexplosion(3)
     },
     methods: {
       ...mapMutations({
@@ -144,33 +126,18 @@
         refSubPrdInfo:'refSubPrdInfo'
       }),
       getSubInfo (label,tabkey0) {
+        if( label ==='首页') {
+          return
+        }
         let tabkey = tabkey0.slice(0,tabkey0.length-1)
         let index = parseInt(tabkey0.substring(tabkey0.length-1))
-        let url = this.userInfos.reqUrl
-        // 点击首页按钮不请求 第一次点击标题栏目的时候请求内容 并存在数组中 第二次点击不请求
-        if( label ==='首页'|| this.times[index] !== undefined) {
-          return
-        } else if (label ==='众筹'){
-          this.getCrowdfundingProducts(url,tabkey,index)
-        } else {
+        let url = this.readUrl
+        //this.showMoreAtrr.isLogin = this.userInfos
+        // 第一次点击标题栏目的时候请求内容 并存在数组中 第二次点击不请求
+        if(this.times[index] === undefined){
           this.getSubInfoShow(url,tabkey,index)
+          this.times[index] =1
         }
-        this.times[index] =1
-      },
-      getCrowdfundingProducts(url,tabkey,index){
-        // 获取众筹
-        this.$dialog.loading.open('拼命加载中')
-        this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${ProductCategoryInsideId} == '"+tabkey+"' || ${Product_CategoryId} == '"+tabkey+"'","IsIncludeSubtables":false,"IsReturnTotal":true,"Items":["Id","ShowName","Subtitle","SalePrice","LYPrice","PriceInside","ImgId","Inv","Unit","ProductCategoryInsideId","Import","LimitQnty","Order","AccPrice"],"MaxCount":"9999","Operation": _prdInfo,"Order":"${Order} ASC"})
-          .then((res) => {
-          console.log(res.data.Datas)
-          if(res.data.Datas.length>0){
-            this.$set(this.subPrdInfos,index,res.data.Datas)
-          }
-          this.$dialog.loading.close()
-        }).catch((err) => {
-          this.$dialog.loading.close()
-          this.$dialog.toast({mes: '操作失败,请重试', timeout: 1500})
-        })
       },
       getSubInfoShow (url,tabkey,index) {
         this.showMoreAtrr.isLogin = this.userInfos.login
@@ -183,7 +150,7 @@
       },
       getSubPicShow (url,tabkey,index){
         // 请求二级标题的轮播图片
-        this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${ProductCategoryId} == '" + tabkey +"'","IsIncludeSubtables":false,"IsReturnTotal":true,"Operation": _picBelowShow})
+        this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${ProductCategoryId} == '" + tabkey +"'","IsIncludeSubtables":false,"IsReturnTotal":true,"Items":["Id","ImgId","LinkTypeKey","KeyWord","Url","ProductId","Name","BelowShow"],"Operation": _picBelowShow})
             .then((res) => {
           if(this.outIndex){
             this.refSubPicsShow(res.data.Datas)
@@ -196,14 +163,11 @@
       getSubPrdIcons (url,tabkey,index){
         // 获取二级标题的分类
         let _this = this
-        this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${IsShow} == 'True' && ${ParentId} == '" + tabkey +"'","IsIncludeSubtables":true,"IsReturnTotal":true,"Items":["Id","Name","ImgId","Description","CategoryMaxShow","Order",'IconId'],"Operation":_prdType,"Order":"${Order} ASC"}
+        this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${IsShow} == 'True' && ${ParentId} == '" + tabkey +"'","IsIncludeSubtables":false,"IsReturnTotal":true,"Items":["Id","Name","ImgId","Description","CategoryMaxShow","Order",'IconId'],"Operation":_prdType,"Order":"${Order} ASC"}
         ).then((res) => {
           let prdIntr =[]
-          this.iconId[index] = res.data.Datas
-          for (let i= 0; i<this.iconId[index].length;i++){
-            this.iconId[index][i].link = '/prdItems?showIndex='+i+"&name="+this.iconId[index][i].Name
-            this.iconId[index][i].rows = this.iconId[index].length
-          }
+          console.log(res.data.Datas)
+          this.iconId = res.data.Datas
           let res0 =  res.data.Datas
           for (let i=0;i<res0.length;i++){
             prdIntr[res0[i].Name] = res0[i].Id
@@ -222,8 +186,11 @@
         let reqArr = []
         let resArr =[]
         for (let key0 in indexItem){
-          indexItemUrl.push(indexItem[key0])
-          keyName.push(key0)
+          //console.log(key0)
+          if(key0 !== '众筹'){
+            indexItemUrl.push(indexItem[key0])
+            keyName.push(key0)
+          }
         }
         let promises = indexItemUrl.map(function (id) {
           return _this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${ProductCategoryInsideId} == '"+id+"' || ${Product_CategoryId} == '"+id+"'","IsIncludeSubtables":false,"IsReturnTotal":true,"Items":["Id","ShowName","Subtitle","SalePrice","LYPrice","PriceInside","ImgId","Inv","Unit","ProductCategoryInsideId","Import","LimitQnty","Order","AccPrice"],"MaxCount":"9999","Operation": _prdInfo,"Order":"${Order} ASC"})
@@ -238,14 +205,13 @@
             _this.refSubPrdInfo(resArr)
           }
           _this.$set(_this.subPrdInfos,index,resArr)
-          _this.refSubPrdInfo(resArr)
         }).catch(function(reason){
           this.getSubPrdIntr()
         })
       },
       getIndexPicShow () {
-        let url = this.userInfos.reqUrl
-        this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${IsHomePageShow} == 'True' || ${BelowShow} == 'True'","IsIncludeSubtables":false,"IsReturnTotal":true,'Operation': _picBelowShow })
+        let url = this.readUrl
+        this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${IsHomePageShow} == 'True' || ${BelowShow} == 'True'","IsIncludeSubtables":false,"IsReturnTotal":true,"Items":["Id","ImgId","LinkTypeKey","KeyWord","Url","ProductId","Name","BelowShow"],'Operation': _picBelowShow })
           .then((res) => {
            let picArr = []
            for(let i=0;i<res.data.Datas.length;i++){
@@ -267,40 +233,64 @@
       goDetailPage (prdId,imgId) {
         this.$router.push({path: '/prdDetail', query: {prdId: prdId,imgId:imgId}})
       },
+      getIndexPic (id) {
+        //获得产品的图片
+        return getImgs(id)
+      },
       getisEntry () {
         //判断是否登录 并获取session
         this.userInfos = isLogin(_readURL)
-        //this.readUrl=this.userInfos.reqUrl
+        this.readUrl=this.userInfos.reqUrl
         //this.userInfos = entry.login
       },
       getLYnotice () {
         // 获得老友快报内容
-        let url = this.userInfos.reqUrl
-        this.axios.post(url,{"AppendixesFormatType":1,"Items":['Id', 'Title', 'LinkTypeKey', 'ProductId', 'SubjectId', 'CategoryId', 'KeyWord'],"Order": "${CreateTime} DESC",'Operation': _LYnotice})
+        let url = this.readUrl
+        this.axios.post(url,{'Operation': _LYnotice})
           .then((res) => {
-            if(res.data.Datas.length>0){
-              this.LYnotice = res.data.Datas[0]
-            }
+            this.LYnotice.prdName = res.data.Datas[0].Title
+            this.LYnotice.prdId = res.data.Datas[0].ProductId
           }).catch((err) => {
             alert(err)
         })
       },
-      getHotread () {
-        // 首页为你推荐等精选
-        this.$dialog.loading.open('拼命加载中')
-        let url = this.userInfos.reqUrl
-        this.axios.post(url,{"AppendixesFormatType":1,"IsIncludeSubtables":true,"IsReturnTotal":true,"MaxCount":999,"Operation": _hotRead})
+      getLYexplosion (num) {
+        //获取老友爆款
+        let url = this.readUrl
+        let opt= ''
+        let name  = ''
+        this.axios.post(url,{'Operation':  _prdLabel})
           .then((res) => {
-          this.$dialog.loading.close()
-          this.hotReadList = res.data.Datas
-        }).catch((err) => {
-          this.$dialog.loading.close()
-          this.$dialog.toast({mes: '操作失败,请重试', timeout: 1500})
-        })
+            opt = res.data.Datas[0].Id
+            name = res.data.Datas[0].Name
+            let BKimg = [{ImgId:res.data.Datas[0].ImgId}]
+            let param = {"Appendixes":{"+Product":["Name","ImgId","SalePrice","Subtitle","Inv","LYPrice","AccPrice"]},"AppendixesFormatType":1,"Condition":"${TargetId} == '"+opt+"'","IsIncludeSubtables":false,"IsReturnTotal":true,"Items":["Id","Name","ProductId"],"Operation": _prdTarget}
+            if (num){
+              param["MaxCount"]= num
+            }
+            this.axios.post(url,param)
+              .then((res) => {
+                let LYprdArr = res.data.Appendixes
+                for (let i=0;i<LYprdArr.length;i++){
+                  LYprdArr[i].ProductId= res.data.Datas[i].ProductId
+                  LYprdArr[i].Id= res.data.Datas[i].Id
+                }
+                if(this.outIndex){
+                  this.refSubPrdInfo(LYprdArr)
+                  this.refSubPicsShow(BKimg)
+                } else {
+                  this.BKlists =LYprdArr
+                }
+
+                this.LYBK = { prdId: opt , name: name,theme:'4', isLogin: this.userInfos.login,type:this.userInfos.MemberTypeKey}
+              })
+          }).catch((err) => {
+            alert(err)
+          })
       },
       getIndexPrdItem () {
         // 获得首页产品分类（二级导航栏）
-        let url = this.userInfos.reqUrl
+        let url = this.readUrl
         this.axios.post(url, { 'Condition': '${IsShow} == True && ${ShowInHomepage} == True && ${Hierarchy} == 1', 'Operation': _prdType,  "IsReturnTotal":true, "Items":["Id", "Name", "ImgId", "MaxShow", "Order"], "Order":"${Order} ASC"})
           .then((res) => {
             let arr =res.data.Datas
@@ -311,31 +301,48 @@
             }
             res.data.Datas.unshift({'Name':'首页'})
             this.topBar0 = res.data.Datas
-            //this.getIndexPrd (indexItem,url)
+            this.getIndexPrd (indexItem,url)
           }).catch((err) => {
             alert(err)
           })
       },
-      getTopicInfos () {
-        // 获取首页的精选
-        this.$dialog.loading.open('拼命加载中')
-        let url = this.userInfos.reqUrl
-        this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${Deleted} == 'False'&& ${Hide} == 'False'","IsIncludeSubtables":true,"IsReturnTotal":true,"Operation": _topic})
-          .then((res) => {
-          this.$dialog.loading.close()
-          this.topicLists = res.data.Datas
-        }).catch((err) => {
-          this.$dialog.loading.close()
-          this.$dialog.toast({mes: '操作失败,请重试', timeout: 1500})
+      getIndexPrd (indexItem,url) {
+
+        // 首页的获得产品信息
+        let _this = this
+        let  indexItemUrl= []
+        let keyName =[]
+        let reqArr = []
+        this.showMoreAtrr.isLogin = this.userInfos.login
+        this.showMoreAtrr.type = this.userInfos.MemberTypeKey
+        for (let key0 in indexItem){
+             if(key0 !== '众筹'){
+               indexItemUrl.push(indexItem[key0])
+               keyName.push(key0)
+             }
+        }
+        let promises = indexItemUrl.map(function (id) {
+            return _this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${FirstCategoryId} == '"+id+"'","IsIncludeSubtables":false,"IsReturnTotal":true,"Items":["Id","ShowName","Subtitle","SalePrice","LYPrice","PriceInside","ImgId","Inv","Unit","ProductCategoryInsideId","Import","LimitQnty","Order","AccPrice"],"MaxCount":"4","Operation": _prdInfo,"Order":"${Order} ASC"})
         })
+        Promise.all(promises).then(function (posts) {
+           for(let i =0;i<posts.length;i++){
+               reqArr = posts[i].data.Datas
+               reqArr.unshift({Name:keyName[i],Id:indexItemUrl[i],isLogin: _this.userInfos.login})
+               _this.lists.push(reqArr)
+           }
+        }).catch(function(reason){
+            alert(reason)
+        });
       }
     }
   }
 </script>
 <style>
 
+
 </style>
 <style scoped>
+
   .searchbar{
     height: 0.65rem;
     line-height: 0.65rem;
@@ -389,37 +396,5 @@
       color: #fff;
       background: #BD0E00;
   }
-  .indexType p{
-    height: 1rem;
-    line-height: 1rem;
-    background: #fff;
-    position: relative;
-    font-size: .3rem;
-  }
-  .indexType span{
-    position: absolute;
-    right: .3rem;
-  }
-  .recommend {
-    background: #fff;
-    margin: .15rem 0;
-  }
-  .recommend ul{
-    overflow: hidden;
-    padding: 0 .26rem .26rem .26rem;
-    width: 100%;
-  }
-  .recommend ul li{
-    float: left;
-    margin:.03rem .02rem;
-    width:3.44rem;
-    height: 2.02rem;
-    overflow: hidden;
-    box-sizing: border-box;
-  }
-  .recommend ul li img{
-    width: 100%;
-  }
-
 </style>
 

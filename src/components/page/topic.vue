@@ -5,18 +5,18 @@
       <div class="topicPage">
         <div class="content">
           <div v-for="(topicList,index) in topicLists" :key="index">
-            <router-link :to="{path:'/subjectAspx',query:{prdId:topicList.Id,title:topicList.Title}}">
-              <p class="topic">
-                <img v-lazy="getPic(topicList.Img2Id)" alt=""/>
-                {{topicList.Name}}
-              </p>
+            <router-link :to="{path:'/topicDetail',query:{prdId:topicList.Id,title:topicList.Title}}">
+              <!--<p class="topic">-->
+                <!--<img v-lazy="getPic(topicList.Img2Id)" alt=""/>-->
+                <!--{{topicList.Name}}-->
+              <!--</p>-->
               <div class="imgDiv">
                 <img :src="getPic(topicList.ImgId)" alt=""/>
               </div>
               <div class="info">
                 <p>
                   <span class="fl Title">{{topicList.Title}}</span>
-                  <span class="fr PriceDes">{{topicList.PriceDes}}</span>
+                  <!--<span class="fr PriceDes">{{topicList.PriceDes}}</span>-->
                 </p>
                 <div class="Subtitle">
                   {{topicList.Subtitle}}
@@ -59,7 +59,7 @@
       getTopicInfos () {
         this.$dialog.loading.open('拼命加载中')
         let url = this.userInfos.reqUrl
-        this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${Deleted} == 'False'","IsIncludeSubtables":false,"IsReturnTotal":true,"Items":["Id","ImgId","Img2Id","Name","Title","Subtitle","PriceDes","Order"],"MaxCount":"25","Operation": _topic})
+        this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${Deleted} == 'False'&& ${Hide} == 'False'","IsIncludeSubtables":false,"IsReturnTotal":true,"Items": ['Id', 'ImgId', 'Img2Id', 'Name', 'Title', 'Subtitle', 'PriceDes','ProductId'],"MaxCount":"25","Operation": _topic})
             .then((res) => {
            this.$dialog.loading.close()
            this.topicLists = res.data.Datas
@@ -96,7 +96,7 @@
     border-radius: 100rem;
   }
   .content .imgDiv{
-    min-height: 4.4rem;
+    min-height: 3.7rem;
   }
   .content .imgDiv img{
     width:100%;
@@ -114,7 +114,7 @@
   }
   span.Title{
     color: #000;
-    width: 73%;
+    width: 95%;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;

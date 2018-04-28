@@ -33,7 +33,7 @@
 </template>
 
 <script>
-    import { getImgs } from '../../common/index.js'
+    import { getImgs } from '../../../common/index.js'
     export default {
       props: {
         getBKPrdInfos: {

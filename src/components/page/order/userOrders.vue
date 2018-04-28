@@ -270,6 +270,7 @@
 </script>
 
 <style>
+
   .userOrdersPage .yd-tab-panel {
     background-color: #f1f3f4;
   }
@@ -295,10 +296,15 @@
   .userOrdersPage .yd-tab{
     margin-top: .9rem;
   }
+  .userOrdersPage #scrollView .orderLogisticsPage{
+    margin-top: .894rem;
+  }
 </style>
 <style scoped>
   .userOrdersPage{
     text-align: left;
+    height: 100%;
+    overflow: hidden;
   }
   .AppliyRefund{
     font-size: .3rem;

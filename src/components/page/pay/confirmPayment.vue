@@ -69,9 +69,9 @@
       getOrderInfos () {
         this.orderId = this.$route.query.Id
         let url = this.userInfos.reqUrl
+        this.$dialog.loading.open('请稍后')
         this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${Id} == '"+this.orderId+"'","IsIncludeSubtables":false,"IsReturnTotal":true,"Operation":_comfrimOrder}
         ).then((res) => {
-          this.$dialog.loading.open('请稍后')
           this.orderLists = res.data.Datas[0]
           this.orderStatus = res.data.Datas[0].StatusKey
           // 如果订单状态不是6关闭 而且点击了支付按钮 那么开始支付

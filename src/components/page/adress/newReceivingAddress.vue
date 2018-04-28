@@ -1,35 +1,38 @@
 <template>
   <!-- 新建收货地址-->
-  <div>
+  <div style="padding-top: .9rem">
     <!-- 地址填写部分-->
     <div class="newAddress" v-show="show">
       <v-topbar :title="titleAttr">
         <span class="opt" @click.prevent="toSaveAddr">保存</span>
       </v-topbar>
-      <div class="writeAddr">
+      <div class="writeAddr" >
         <yd-cell-group>
           <yd-cell-item>
-            <span slot="left"><span class="Required">*</span>收货人姓名：</span>
+            <span slot="left">
+              <!--<span class="Required">*</span>-->
+              收货人：</span>
             <yd-input slot="right"  v-model="receiver"  placeholder="请输入收货人姓名"></yd-input>
           </yd-cell-item>
           <yd-cell-item>
-            <span slot="left"><span class="Required">*</span>手机号码：</span>
+            <span slot="left">手机号：</span>
             <yd-input slot="right"  v-model="phone"  placeholder="请输入手机号码"></yd-input>
           </yd-cell-item>
           <yd-cell-item>
-            <span slot="left">身份证号码：</span>
-            <yd-input slot="right" v-model="IDcard"  placeholder="购买跨境商品时，需正确填写"></yd-input>
+            <span slot="left">身份证号：</span>
+            <yd-input slot="right" v-model="IDcard"  placeholder="购买跨境商品时，必须需正确填写"></yd-input>
           </yd-cell-item>
           <yd-cell-item @click.native="chooseArea">
-            <span slot="left"><span class="Required">*</span>省市区：</span>
-            <yd-input slot="right"  v-model="area"  placeholder="请选择" readonly></yd-input>
+            <span slot="left">所在地区：</span>
+            <yd-input slot="right"  v-model="area"  placeholder="请选择所在地址" readonly></yd-input>
           </yd-cell-item>
           <yd-cell-item >
-            <p slot="left" class="mainAddr"><span class="Required">*</span>详细地址：</p>
+            <span slot="left" class="mainAddr">详细地址：</span>
+            <yd-input slot="right"  v-model="receivingAddress"  placeholder="请输入详细收货地址" ></yd-input>
           </yd-cell-item>
-          <yd-cell-item>
-            <yd-textarea slot="right" v-model="receivingAddress" placeholder="请输入详细的收货地址" maxlength="100"></yd-textarea>
-          </yd-cell-item>
+          <!--<yd-cell-item>-->
+            <!--<yd-textarea slot="right" v-model="receivingAddress" placeholder="" maxlength="100"></yd-textarea>-->
+          <!--</yd-cell-item>-->
         </yd-cell-group>
       </div>
     </div>
@@ -113,9 +116,13 @@
       // 判断是否是修改地址 并的得到vux里面存储的数据
       if(this.$route.query.num  && window.sessionStorage.recevingInfo && !this.recevingInfoLists ){
         this.refRecevingInfo(JSON.parse(unescape(window.sessionStorage.getItem('recevingInfo'))))
+
       }
-      // 渲染dom
-      this.getQueryAddrInfos()
+      if (this.recevingInfoLists ){
+        // 渲染dom
+        this.getQueryAddrInfos()
+      }
+
     },
     methods: {
       ...mapMutations({
@@ -176,18 +183,23 @@
         // 验证填写信息的准确性
         if (isEmpty(this.receiver)) {
           this.$dialog.toast({mes: '请输入您的姓名', timeout: 1500})
+          this.addTimes = ''
           return false
         } else if (!validateMobile(this.phone).statu) {
           this.$dialog.toast({mes: validateMobile(this.phone).mes, timeout: 1500})
+          this.addTimes = ''
           return false
         } else if (!isEmpty(this.IDcard)&&!IdentityCodeValid(this.IDcard)){
           this.$dialog.toast({mes:'身份证格式不正确', timeout: 1500})
+          this.addTimes = ''
           return false
         } else if (isEmpty(this.area)){
           this.$dialog.toast({mes:'请选择省市区', timeout: 1500})
+          this.addTimes = ''
           return false
         }  else if (isEmpty(this.receivingAddress)){
           this.$dialog.toast({mes:'请填写详细的收货地址', timeout: 1500})
+          this.addTimes = ''
           return false
         }
         return true
@@ -207,7 +219,9 @@
       getQueryAddrInfos () {
         this.receiver = this.recevingInfoLists.Consignee
         this.phone = this.recevingInfoLists.Mobile
-        this.area = this.recevingInfoLists.FullName
+        let areaArr = this.recevingInfoLists.Address.split(" ")
+        areaArr.pop()
+        this.area = areaArr.join(" ")
         this.IDcard = this.recevingInfoLists.Card
         this.receivingAddress = this.recevingInfoLists.Address1
         this.addressId = this.recevingInfoLists.Id
@@ -281,7 +295,11 @@
     }
   }
 </script>
-
+<style>
+  .writeAddr .yd-cell{
+    background: transparent;
+  }
+</style>
 <style scoped>
   .writeAddr .yd-cell-box{
     margin-bottom:0
@@ -289,9 +307,6 @@
   .Required{
     color: #7697c6;
     margin-right: 0.15rem;
-  }
-  .writeAddr .yd-cell-item:not(:last-child):after{
-    border-bottom: 0;
   }
   .writeAddr .yd-textarea{
     padding:0 .15rem;
@@ -305,6 +320,12 @@
     position: absolute;
     left: 0.1rem;
     top:.25rem;
+  }
+  .writeAddr .yd-cell-item{
+    background: #fff;
+  }
+  .writeAddr .yd-cell-item:nth-child(4){
+    margin-top: .2rem;
   }
 </style>
 

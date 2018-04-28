@@ -10,26 +10,26 @@
         <div class="logistics">
           <!-- 物流单号-->
           <div class="logisticsCompany">
-            <p style="margin-bottom: .3rem">物流公司：{{orderInfo.Express_Name}}</p>
+            <p style="margin-bottom: .1rem">物流公司：{{orderInfo.Express_Name}}</p>
             <p>物流单号：{{orderInfo.Express_No}}</p>
           </div>
           <!-- 商品信息-->
-          <div class="orderDetail">
-            <p>商品信息</p>
-            <div class="productInfo" v-for="( prdList, index) in orderInfo.Line" :key="index">
-              <yd-flexbox>
-                <img :src="getPic(prdList.ImgId)" class="demo-checklist-img">
-                <yd-flexbox-item align="top">
-                  <p>{{prdList.Product_ShowName}}</p>
-                  <span>{{prdList.S_Name}}</span>
-                </yd-flexbox-item>
-                <div class="items">
-                  <p>¥ {{prdList.Price}}</p>
-                  <span>×{{prdList.Qnty}}</span>
-                </div>
-              </yd-flexbox>
-            </div>
-          </div>
+          <!--<div class="orderDetail">-->
+            <!--<p>商品信息</p>-->
+            <!--<div class="productInfo" v-for="( prdList, index) in orderInfo.Line" :key="index">-->
+              <!--<yd-flexbox>-->
+                <!--<img :src="getPic(prdList.ImgId)" class="demo-checklist-img">-->
+                <!--<yd-flexbox-item align="top">-->
+                  <!--<p>{{prdList.Product_ShowName}}</p>-->
+                  <!--<span>{{prdList.S_Name}}</span>-->
+                <!--</yd-flexbox-item>-->
+                <!--<div class="items">-->
+                  <!--<p>¥ {{prdList.Price}}</p>-->
+                  <!--<span>×{{prdList.Qnty}}</span>-->
+                <!--</div>-->
+              <!--</yd-flexbox>-->
+            <!--</div>-->
+          <!--</div>-->
           <!-- 物流时间轴-->
           <div class="timeline">
             <p>订单跟踪</p>
@@ -65,11 +65,13 @@
     },
     methods: {
       getLogistics ( obj ) {
+        console.log(obj)
         this.logisticsInfo = ''
         this.resultcode = false
         this.orderInfo = obj
         let _this = this
         this.$jsonp(_logisticsCompanyUrl, { key:_logisticsKey,	com:obj.Express_Code,no: obj.Express_No}).then(res => {
+            console.log(res)
             if(res.resultcode == '200'){
               _this.logisticsInfo  = res.result.list.reverse()
               _this.$emit('logisticsCallback',_this.logisticsInfo[0])
@@ -91,22 +93,24 @@
   }
 </script>
 <style>
+  #scrollView .orderLogisticsPage{
+    margin-top: 0;
+  }
   .orderLogisticsPage .yd-timeline-item:first-child>.yd-timeline-icon{
-    background-color: #00b44b;
+    background-color: #AF383A;
   }
   .orderLogisticsPage .yd-timeline-item:first-child:before {
-    background-color: #a6e7bc;
+    /*background-color: #a6e7bc;*/
   }
   .orderLogisticsPage .yd-timeline-item:first-child p {
-    color: #00b44b;
+    color: #AF383A;
   }
 </style>
 <style scoped>
  .logistics{
    text-align: left;
-   background: #fff;
  }
-  .logisticsCompany,.orderDetail>p, .timeline>p{
+  .logisticsCompany,.orderDetail>p{
     padding:.25rem .2rem;
     font-size: .3rem;
   }
@@ -114,11 +118,15 @@
    background:#fafafa;
  }
  .logisticsCompany{
-   background: #f1f1f1;
-   padding:.6rem .2rem;
+   background: #fff;
+   margin-bottom: .2rem;
+   padding-left: 1.2rem;
+   background: #fff url("../../../img/company.png") no-repeat .2rem center;
+   background-size: .72rem;
  }
  .timeline>p{
-   padding-top: 0rem;
+   padding: .25rem  .2rem;
+   background: #fff;
  }
  .orderDetail .productInfo{
    border-bottom: 0;

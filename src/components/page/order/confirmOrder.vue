@@ -5,17 +5,19 @@
       <v-topbar :title="titleAttr" slot="navbar"></v-topbar>
       <div class="confirmOrder">
         <div class="orderDetail">
-          <div class="address">
+          <router-link v-if='!isCrowdfunding' :to="{path:'receivingAddress',query:{from:'/confirmOrder',Id:orderId}}">
+            <div class="address">
             <p>
-              <span class="fl">{{orderLists.Consignee}}</span>
-              <span class="fr">{{orderLists.Mobile}}</span>
+              <span>{{orderLists.Consignee? orderLists.Consignee:'请添加地址'}}</span>
+              <span style="margin-left: .7rem;color: #">{{orderLists.Mobile }}</span>
             </p>
-            <router-link :to="{path:'receivingAddress',query:{from:'/confirmOrder',Id:orderId}}">
+
               <div class="addressInfo">
-                {{orderLists.Address}}
+                {{orderLists.Address? orderLists.Address:'您还没有添加收货地址，赶紧加一个'}}
               </div>
-            </router-link>
+
           </div>
+          </router-link>
           <!-- 产品明细-->
           <div>
             <div class="productInfo" v-for="( prdList, index) in prdLists" :key="index">
@@ -49,27 +51,27 @@
             <p >结算</p>
             <ul>
               <li>
-                <span class="fl">商品合计</span>
+                <span class="fl">应付总额</span>
+                <span class="fr payMoney">¥ {{parseFloat(orderLists.Due).toFixed(2)}}</span>
+              </li>
+              <li>
+                <span class="fl">商品价格</span>
                 <span class="fr">¥ {{parseFloat(orderLists.Total).toFixed(2)}}</span>
               </li>
               <li >
-                <span class="fl">优惠</span>
-                <span class="fr">¥ {{parseFloat(orderLists.Discount).toFixed(2)}}</span>
+                <span class="fl">优惠劵</span>
+                <span class="fr">- ¥ {{parseFloat(orderLists.Discount).toFixed(2)}}</span>
               </li>
               <li>
                 <span class="fl">运费</span>
                 <span class="fr">¥ {{parseFloat(orderLists.ExpressSum).toFixed(2)}}</span>
               </li>
-              <li>
+              <li style="margin-bottom: .2rem">
                 <span class="fl">已省金额</span>
-                <span class="fr">¥ {{parseFloat(orderLists.BuyerCommission).toFixed(2)}}</span>
+                <span class="fr">- ¥ {{parseFloat(orderLists.BuyerCommission).toFixed(2)}}</span>
               </li>
               <li>
-                <span class="fl">应付总额</span>
-                <span class="fr">¥ {{parseFloat(orderLists.Due).toFixed(2)}}</span>
-              </li>
-              <li>
-                <span class="fl">使用钱包 <span style="color: red">{{orderLists.Balance=='0'? '...':orderLists.Balance+'元'}}</span></span>
+                <span class="fl">使用钱包 <span> {{'(余额：¥ '+ orderLists.Balance+'元 )'}}</span></span>
                 <span class="fr" ><yd-switch color='#af8327' :disabled="switchdisabled" v-model="balanceSwitch"></yd-switch></span>
               </li>
               <li>
@@ -94,7 +96,7 @@
 
 <script>
   import VTopbar from '../../base/topBar.vue'
-  import { _readURL, _writeURL, _comfrimOrder,_coupons,_modifyOrder } from '../../../common/request.js'
+  import { _readURL, _writeURL, _comfrimOrder,_coupons,_modifyOrder, _recevingAddress } from '../../../common/request.js'
   import { isLogin, getImgs, reqUrl, getUUID, getTimes } from '../../../common/index.js'
   export default {
     data () {
@@ -111,7 +113,9 @@
         switchdisabled:true, // 钱包开关是否都能点击
         leavingMes: '', // 买家留言
         Delivery_AddressId: '', // 收货人信息
-        CouponId: '', // 优惠卷号码
+        CouponId: '', // 优惠卷号码,
+        addressLists:'',
+        isCrowdfunding:false
       }
     },
     watch: {
@@ -122,6 +126,10 @@
     },
     mounted: function () {
       this.orderId = this.$route.query.orderId
+      if(this.$route.query.isCrowdfunding == true){
+        this.isCrowdfunding = true
+      }
+
       this.getIsEntry()
       if(window.sessionStorage.comfirmOrderInfo){
         this.orderLists = JSON.parse(unescape(window.sessionStorage.comfirmOrderInfo))
@@ -129,6 +137,7 @@
       } else {
         this.getOrderInfos()
       }
+
       this.prdInfos()
     },
     methods: {
@@ -142,12 +151,36 @@
       prdInfos() {
         this.prdLists = JSON.parse(window.sessionStorage.buyPrd)
       },
+      getAddress () {
+        this.$dialog.loading.open('拼命加载中')
+        let url = this.userInfos.reqUrl
+        this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${MemberId} == '"+this.userInfos.userId+"'","IsIncludeSubtables":false,"IsReturnTotal":true,"Operation": _recevingAddress,"Order":"${Default} DESC"})
+          .then((res) => {
+          this.$dialog.loading.close()
+          if(res.data.Datas.length>0){
+            this.Delivery_AddressId = res.data.Datas[0]
+            this.orderLists.Consignee = res.data.Datas[0].Consignee
+            this.orderLists.Mobile = res.data.Datas[0].Mobile
+            this.orderLists.Address = res.data.Datas[0].Address
+            this.orderLists.Delivery_AddressId = res.data.Datas[0].Id
+            window.sessionStorage.comfirmOrderInfo = escape(JSON.stringify(this.orderLists))
+          }
+        }).catch((err) => {
+          this.$dialog.loading.close()
+          this.$dialog.toast({mes: '操作失败,请重试', timeout: 1500})
+        })
+      },
       getOrderInfos () {
         this.$dialog.loading.open('拼命加载中')
         let url = this.userInfos.reqUrl
         this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${Id} == '"+this.orderId+"'","IsIncludeSubtables":false,"IsReturnTotal":true,"Operation":_comfrimOrder}
         ).then((res) => {
           this.orderLists = res.data.Datas[0]
+          this.orderLists.isCrowdfunding = this.isCrowdfunding
+          // 如果没有收货人地址而且不是众筹订单 那么开始请求默认地址
+          if(this.orderLists.Delivery_AddressId == '00000000-0000-0000-0000-000000000000'&&!this.isCrowdfunding){
+            this.getAddress()
+          }
           this.isSwitchDisabled()
           // 获取优惠卷
           if (this.couponNum == 0) {
@@ -191,9 +224,14 @@
         })
       },
       comfirmOrder () {
+        if(this.orderLists.Formal == 'True'){
+          this.$dialog.toast({mes: '请勿重复提交订单', timeout: 1500})
+          return
+        }
         this.$dialog.loading.open('正在提交订单...')
         let url = this.writeUrl
-        this.axios.post(url,{"Items":[{"Data":{"EntityName":"Order","Items":{"Id":this.orderId,"Formal":'True',"Remark":this.leavingMes,"Delete":"False"},"Status":"Existed"},"ModifyOperationId":_modifyOrder}]}).then((res) => {
+        let AddressId = this.orderLists.isCrowdfunding?  getUUID():this.orderLists.Delivery_AddressId
+        this.axios.post(url,{"Items":[{"Data":{"EntityName":"Order","Items":{"Id":this.orderId,"Formal":'True',Delivery_AddressId:AddressId,"Remark":this.leavingMes,"Delete":"False"},"Status":"Existed"},"ModifyOperationId":_modifyOrder}]}).then((res) => {
           if(JSON.stringify(res.data) == "{}"){
             this.$dialog.loading.close()
             this.$router.push({path:'/payment',query:{Id:this.orderId}})

@@ -12,8 +12,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://202.91.250.138/bbmt',
-        //target: 'http://www.babymarkt.com.cn',
+        //target: 'http://202.91.250.138/bbmt',
+        target: 'http://www.babymarkt.com.cn',
         changeOrigin:true,
         pathRewrite: {
           '^/api': '/'
@@ -64,8 +64,10 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/bbmt/dist/',
-
+    // 网页版
+    assetsPublicPath: '/web/dist/',
+    // app版路径
+    //assetsPublicPath: './',
     /**
      * Source Maps
      */

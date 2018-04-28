@@ -32,15 +32,15 @@
           </div>
         </div>
         <!-- 搜索结果-->
-        <div class="searhResult indexPrd indexPage" v-show="!show">
+        <div class="searhResult indexPrd prdListTheme" v-show="!show">
           <div class="prdIntr" v-if="searhResultLists.length>0">
             <yd-list theme="2">
-              <yd-list-item v-for="searhResult, key in searhResultLists" :key="key"  @click.native="goDetailPage(searhResult.Id)">
+              <yd-list-item v-for="searhResult, key in searhResultLists" :key="key"  @click.native="goDetailPage(searhResult)">
                 <img slot="img" v-lazy="getPic(searhResult.ImgId)">
-                <span slot="title">{{searhResult.ShowName}}</span>
+                <span slot="title">{{searhResult.ShowName? searhResult.ShowName:searhResult.ProductName}}</span>
                 <yd-list-other slot="other">
                   <div class="priceDiv" v-if="userInfos.login && (userInfos.MemberTypeKey == '3')">
-                    <span class="AccPrice">￥ {{searhResult.AccPrice}}</span>
+                    <span class="AccPrice">￥ {{searhResult.AccPrice? searhResult.AccPrice:searhResult.HSPrice}}</span>
                     合作尊享
                   </div>
                   <div class="priceDiv">
@@ -97,6 +97,9 @@
         if (this.$route.query.keyword){
           this.show = false
           this.searchKeyWords(this.$route.query.keyword)
+        } else if (this.$route.query.subjectId){
+          this.show = false
+          this.getSubject(this.$route.query.subjectId)
         }
         if(this.userInfos.login){
           this.writeUrl = reqUrl(_writeURL,this.userInfos.session)
@@ -116,18 +119,35 @@
         this.keyWord = keyWord.replace(/\s+/g,"")
         let url = this.userInfos.reqUrl
         this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${KeyWord} like %"+ this.keyWord +"% || ${ShowName} like %"+ this.keyWord +"%","IsIncludeSubtables":false,"IsReturnTotal":false,"Items":["Id","ShowName","Subtitle","SalePrice","LYPrice","PriceInside","ImgId","Inv","Unit","ProductCategoryInsideId","Import","LimitQnty","Order","AccPrice"],"MaxCount":"20","Operation": _searchKeyWords,"Order":"${Order} ASC"}).then((res) => {
-          this.show = false
-          this.$dialog.loading.close()
-          this.searhResultLists = res.data.Datas
-          if (this.searhResultLists.length>0) {
-            this.showNo = false
-          } else {
-            this.showNo = true
-          }
+          this.showResult(res.data.Datas)
         }).catch((err) => {
           this.$dialog.loading.close()
           this.$dialog.toast({mes: '操作失败,请重试', timeout: 1500})
         })
+      },
+      getSubject (subjectId) {
+        this.$dialog.loading.open('拼命加载中')
+        let url = this.userInfos.reqUrl
+        this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${Id} =='"+subjectId+"'","IsIncludeSubtables":true,"IsReturnTotal":true,"Operation": _topic})
+          .then((res) => {
+          this.showResult(res.data.Datas[0].ProductDetail)
+          //this.$dialog.loading.close()
+          //this.subject =
+        }).catch((err) => {
+          this.$dialog.loading.close()
+          this.$dialog.toast({mes: '操作失败,请重试', timeout: 1500})
+        })
+      },
+      showResult(datas){
+        // 展示搜索结果
+        this.show = false
+        this.$dialog.loading.close()
+        this.searhResultLists = datas
+        if (this.searhResultLists.length>0) {
+          this.showNo = false
+        } else {
+          this.showNo = true
+        }
       },
       addSearchKeyWords (keyWord) {
         let url = this.writeUrl
@@ -173,7 +193,8 @@
       getPic (id) {
         return getImgs(id)
       },
-      goDetailPage (prdId) {
+      goDetailPage (searhResult) {
+        let prdId = searhResult.ProudctId? searhResult.ProudctId:searhResult.Id
         this.$router.push({path: '/prdDetail', query: {prdId: prdId}})
       }
     }

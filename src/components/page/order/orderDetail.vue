@@ -5,17 +5,6 @@
       <div class="orderDetailPage">
         <div class="orderDetail" v-show="showItems[0]">
           <v-topbar :title="titleAttr"  slot="navbar"></v-topbar>
-          <!-- 订单状态-->
-          <div class="orderStatus">
-            <p>订单状态：{{orderStatus}}</p>
-            <p>订单号：{{orderLists.OrderNo}}</p>
-            <p v-if="orderLists.StatusKey ==0">{{time}}</p>
-            <p v-if="orderLists.StatusKey ==6">原因：支付超时</p>
-          </div>
-          <!-- 支付金额-->
-          <div class="orderPrice">
-            支付金额：{{orderLists.Money}}
-          </div>
           <!-- 收货地址-->
           <div class="address">
             <p>
@@ -26,14 +15,21 @@
               {{orderLists.Address}}
             </div>
           </div>
-          <div v-if="orderLists.StatusKey>1&&orderLists.StatusKey<6" class="pLogistics" @click.prevent="showDiv">
-            <yd-icon name="location" size=".5rem"></yd-icon>
-            {{logistics}}
-          </div>
-          <p style="margin-bottom:.18rem">{{orderLists.WarehouseName}}</p>
+          <!-- 支付金额-->
+          <!--<div class="orderPrice">-->
+            <!--支付金额：¥ {{orderLists.Money}}-->
+          <!--</div>-->
+          <!--<div v-if="orderLists.StatusKey>1&&orderLists.StatusKey<6" class="pLogistics" @click.prevent="showDiv">-->
+            <!--<yd-icon name="location" size=".5rem"></yd-icon>-->
+            <!--{{logistics}}-->
+          <!--</div>-->
           <!-- 产品明细-->
-          <div>
-            <div class="productInfo" v-for="( prdList, index) in orderLists.Line" :key="index">
+          <div v-for="( prdList, index) in orderLists.Line" :key="index">
+            <div class="orderStatusP">
+              <span class="fl">{{prdList.WarehouseName}}</span>
+              <span class="fr">{{orderStatus}}</span>
+            </div>
+            <div class="productInfo">
               <yd-flexbox>
                 <img :src="getPic(prdList.ImgId)" class="demo-checklist-img">
                 <yd-flexbox-item align="top">
@@ -49,43 +45,63 @@
           </div>
           <!-- 支付明细-->
           <div class="pay">
-            <p>结算</p>
-            <ul>
-              <li>
-                <span class="fl">商品总额</span>
-                <span class="fr">¥ {{orderLists.Money}}</span>
-              </li>
-              <li>
-                <span class="fl">优惠卷</span>
-                <span class="fr">¥ {{orderLists.Discount}}</span>
-              </li>
-              <li>
-                <span class="fl">物流费用</span>
-                <span class="fr">¥ {{orderLists.Discount}}</span>
-              </li>
-              <li>
-                <span class="fl">关税</span>
-                <span class="fr">¥ {{orderLists.Tax}}</span>
-              </li>
-              <li>
-                <span class="fl">支付方式</span>
-                <span class="fr">¥ {{orderLists.PaywayName}}</span>
-              </li>
-              <li>
-                <span class="fl">已省金额</span>
-                <span class="fr">¥ {{orderLists.BuyerCommission}}</span>
-              </li>
+            <!--<p>结算</p>-->
+            <ul >
               <li>
                 <span class="fl">应付总额</span>
                 <span class="fr">¥ {{orderLists.Due}}</span>
               </li>
+              <li>
+                <span class="fl">商品总价</span>
+                <span class="fr">¥ {{orderLists.Money}}</span>
+              </li>
+              <li>
+                <span class="fl">运费</span>
+                <span class="fr">¥ {{orderLists.Discount}}</span>
+              </li>
+              <li>
+                <span class="fl">税费</span>
+                <span class="fr">¥ {{orderLists.Tax}}</span>
+              </li>
+              <li>
+                <span class="fl">优惠卷</span>
+                <span class="fr">- ¥ {{orderLists.Discount}}</span>
+              </li>
+              <li>
+                <span class="fl">已省金额</span>
+                <span class="fr">- ¥ {{orderLists.BuyerCommission}}</span>
+              </li>
             </ul>
           </div>
+          <!-- 订单状态-->
+          <div class="orderStatus">
+            <p>订单号：<span>{{orderLists.OrderNo}}</span></p>
+            <p>订单方式：<span>{{orderLists.PaywayName?  ('¥ '+orderLists.PaywayName):'第三方付款'}}</span></p>
+            <p>下单时间：<span>{{orderLists.Modify}}</span></p>
+            <p>买家留言：<span>{{orderLists.Remark? orderLists.Remark:'无'}}</span></p>
+            <p v-if="orderLists.StatusKey ==0">{{time}}</p>
+          </div>
+          <!-- 联系客服-->
+          <div class="callUs">
+            <p>服务时间：9:00 - 22:00 </p>
+            <p><span class="btn"><a href="tel://4006286698">电话联系客服</a></span></p>
+          </div>
           <div class="spanBtnDiv">
-            <span class="btn" v-if="Number(orderLists.StatusKey) != 6 && Number(orderLists.StatusKey) != 9">
-          <a href="tel://4006286698">联系客服</a>
-        </span>
-            <span class="btn" v-if="Number(orderLists.StatusKey) >1 &&Number(orderLists.StatusKey) <6 " @click.prevent="showDiv">查看物流</span>
+            <!--<span class="btn" v-if="Number(orderLists.StatusKey) != 6 && Number(orderLists.StatusKey) != 9">-->
+              <!--<a href="tel://4006286698">联系客服</a>-->
+            <!--</span>-->
+            <div>
+              <p class="fl">实付：¥ {{orderLists.Due}}</p>
+              <p class="fr">
+                <span class="btn" v-if="Number(orderLists.StatusKey) ==0 " @click.prevent="cancelOrder">取消订单</span>
+                <span class="btn" v-if="Number(orderLists.StatusKey) == 6 || Number(orderLists.StatusKey) == 8" @click.prevent="deleteOrder">删除订单</span>
+                <router-link :to="{path:'/payment',query:{Id:orderLists.Id}}">
+                  <span class="btn" v-if="Number(orderLists.StatusKey) ==0 " >立即付款</span>
+                </router-link>
+                <span class="btn" v-if="Number(orderLists.StatusKey) ==2 " @click.prevent="arrivalOrder()">确认收货</span>
+                <span class="btn" v-if="Number(orderLists.StatusKey) >1 &&Number(orderLists.StatusKey) <6 " @click.prevent="showDiv">查看物流</span>
+              </p>
+            </div>
           </div>
         </div>
         <div v-show="showItems[1]" v-if="orderLists.StatusKey>1&&orderLists.StatusKey<6">
@@ -93,18 +109,19 @@
         </div>
       </div>
     </yd-layout>
+
   </div>
 </template>
 
 <script>
   import VTopbar from '../../base/topBar.vue'
   import VOrderLogistics from './orderLogistics.vue'
-  import { isLogin, getImgs, reqUrl,ordersStatus } from '../../../common/index.js'
-  import { _readURL, _writeURL, _comfrimOrder } from '../../../common/request.js'
+  import { isLogin, getImgs, reqUrl,ordersStatus,formatTime } from '../../../common/index.js'
+  import { _readURL, _writeURL, _comfrimOrder,_cancelOrder,_arrivalOrder,_deleteOrder,_refundReadOperation } from '../../../common/request.js'
   export default {
     data () {
       return {
-        titleAttr: {'isShow': true, 'name': '订单详情页'},
+        titleAttr: {'isShow': true, 'name': '订单详情'},
         userInfos: '',
         writeUrl: '',
         orderId:'',// 订单编号
@@ -113,7 +130,8 @@
         time:'',
         endTime:'',
         logistics: '', // 物流信息
-        showItems:[true,false] // 0.订单详情 1.物流信息
+        showItems:[true,false], // 0.订单详情 1.物流信息
+        refund:false // 是否是退换货订单
       }
     },
     components: {
@@ -144,14 +162,71 @@
           if (this.orderLists.StatusKey == 0) {
             this.timeOut(this.orderLists.CreateTime,this.time )
           } else if (this.orderLists.StatusKey > 0 && this.orderLists.StatusKey<6){
-            this.$nextTick(() => {
-              this.$refs.logistics.getLogistics(this.orderLists)
-            })
+//            this.$nextTick(() => {
+//              this.$refs.logistics.getLogistics(this.orderLists)
+//            })
           }
           this.$dialog.loading.close()
         }).catch((err) => {
           this.$dialog.loading.close()
           this.$dialog.toast({mes: '操作失败,请重试', timeout: 1500})
+        })
+      },
+      cancelOrder () {
+        // 取消订单
+        let url = this.writeUrl
+        this.$dialog.confirm({
+          title: '温馨提示',
+          mes: '确定取消这个订单吗',
+          opts: () => {
+            let time0 = formatTime()
+            this.axios.post(url,{"Items":[{"Data":{"EntityName":"Order","Items":{"Id":this.orderId,"StatusKey":"6","Cancel_DateTime":time0},"Status":"Existed"},"ModifyOperationId": _cancelOrder}]}
+            ).then((res) => {
+                if(JSON.stringify(res.data) == "{}"){
+                  this.$router.push({path:'/userOrders'})
+                }
+              }).catch((err) => {
+                this.$dialog.toast({mes: '操作失败,请重试', timeout: 1500})
+              })
+          }
+        })
+      },
+      arrivalOrder () {
+        // 确认到货
+        let url = this.writeUrl
+        let time0 = formatTime()
+        this.$dialog.confirm({
+          title: '温馨提示',
+          mes: '是否确认到货',
+          opts: () => {
+            this.axios.post(url,{"Items":[{"Data":{"EntityName":"Order","Items":{"Id":this.orderId,"StatusKey":"3","Confirm_DateTime":time0},"Status":"Existed"},"ModifyOperationId": _arrivalOrder}]}
+            ).then((res) => {
+                if(JSON.stringify(res.data) == "{}"){
+                  this.$router.push({path:'/userOrders'})
+                }
+              }).catch((err) => {
+                this.$dialog.toast({mes: '操作失败,请重试', timeout: 1500})
+              })
+          }
+        })
+      },
+      deleteOrder () {
+        // 删除订单
+        let url = this.writeUrl
+        this.$dialog.confirm({
+          title: '温馨提示',
+          mes: '确定删除这个订单吗',
+          opts: () => {
+            this.axios.post(url,{"Items":[{"Data":{"EntityName":"Order","Items":{"Id":this.orderId,"Delete":"True"},"Status":"Existed"},"DeleteOperation":_deleteOrder}]}
+            ).then((res) => {
+                if(JSON.stringify(res.data) == "{}"){
+                  this.$router.push({path:'/userOrders'})
+                }
+              }).catch((err) => {
+
+                this.$dialog.toast({mes: '操作失败,请重试', timeout: 1500})
+              })
+          }
         })
       },
       orderStatusKey (n) {
@@ -165,6 +240,7 @@
         this.logistics = obj.remark
       },
       showDiv () {
+        this.$refs.logistics.getLogistics(this.orderLists)
         this.showItems = [false,true]
       },
       makeSure () {
@@ -214,6 +290,9 @@
     padding: .26rem .24rem;
     margin-bottom: .2rem;
   }
+  .orderStatus span{
+   color: #515151;
+  }
   .orderDetail>p{
     padding:0 .24rem;
   }
@@ -222,6 +301,7 @@
   }
   .orderStatus>p{
     margin-bottom: .08rem;
+    color: #979797;
   }
   .pLogistics{
     position: relative;
@@ -239,21 +319,66 @@
   }
   .spanBtnDiv{
     text-align: right;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    z-index: 100;
+    padding-top: .15rem;
+    background: #f5f5f5;
   }
-  .spanBtnDiv span.btn{
+  .spanBtnDiv>div{
+    height: 1rem;
+    line-height: 1rem;
+    color: #C7AF7E;
+    font-size: .28rem;
+    padding: 0 .24rem;
+    background: #fff;
+    box-sizing: border-box;
+  }
+  .spanBtnDiv span.btn,.callUs span.btn{
     display: inline-block;
     width:1.5rem;
-    height: .5rem;
-    line-height: .5rem;
+    height: .6rem;
+    line-height: .6rem;
     text-align: center;
     margin-right:.14rem;
-    border-radius: .3rem;
+    border-radius: .09rem;
     border: 1px solid #b0b1b3;
     font-size: .28rem;
-    margin-top: .32rem;
+    margin-top: .2rem;
     background: #fff;
+    color:#515151;
   }
   .orderDetailPage #scrollView>div{
     margin-top: 0;
+  }
+  .pay ul{
+    margin-bottom:.18rem;
+    color: #979797;
+    padding-left: .2rem;
+    background: #fff;
+  }
+  .pay ul li:first-child{
+    color: #252525;
+  }
+  .pay ul li:first-child span.fr{
+    color: #C7AF7E;
+  }
+  .orderDetail .orderStatusP{
+    overflow: hidden;
+    padding: .2rem;
+    background: #fff;
+    border-bottom: 1px solid #dcdcdc;
+  }
+  .orderStatusP span.fr{
+    color:#AF383A;
+  }
+  .callUs{
+    background: #fff;
+    padding: .24rem;
+  }
+  .callUs span.btn{
+    width:3.35rem ;
   }
 </style>

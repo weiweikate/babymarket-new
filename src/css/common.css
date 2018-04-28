@@ -5,6 +5,10 @@ body{
   padding:0;
   height: 100%;
   overflow:auto;
+  color: #515151;
+}
+.clearFloat{
+  overflow: hidden;
 }
 .bgColor{
   background: #fff;
@@ -42,7 +46,7 @@ a{ text-decoration:none;}
   text-align: center;
 }
 .yd-dialog-black-mask .yd-confirm-ft>a.primary,.yd-dialog-black-mask .yd-confirm-ft>a.default{
-  color:#715329;
+  color:#C7AF7E;
   padding:0 !important;
 }
 .yd-dialog-black-mask .yd-confirm-ft>a.default,.yd-dialog-black-mask .yd-confirm-ft>a.primary{
@@ -60,6 +64,16 @@ a{ text-decoration:none;}
   right: 0.25rem;
   font-size: 0.3rem;
 }
+.prdIntr .priceDiv{
+  font-size: 0.18rem;
+  border-left: 1px solid #ddd;
+  text-align: center;
+  /* padding-left: 0.1rem; */
+  width: 100%;
+}
+.prdIntr .priceDiv:first-child{
+  border-left: 0px;
+}
 .prdIntr .priceDiv span{
   display: block;
   font-size: 0.3rem;
@@ -75,22 +89,23 @@ a{ text-decoration:none;}
   text-decoration: line-through;
 }
 .orderDetail .address{
-  font-size:.32rem;
-  padding:.3rem .24rem;
-  padding-left: .8rem;
+  font-size:.3rem;
+  padding:.26rem;
   position: relative;
-  background: #fff url("../img/position.png") no-repeat .2rem center;
-  background-size:.4rem ;
+  background: #FFFCED url("../img/address-bg.png") no-repeat ;
   margin-bottom: .24rem;
   text-align: left;
+  background-size: 100%;
 }
 .orderDetail .address p{
   overflow: hidden;
+  color:#252525;
 }
 .orderDetail .addressInfo{
-  padding:.24rem .4rem .24rem 0 ;
+  padding:.2rem .4rem 0 0 ;
   text-align: left;
   display: inline-block;
+  color: #979797;
 }
 .orderDetail .addressInfo:after,.pLogistics:after{
   margin-left: .05rem;
@@ -147,7 +162,7 @@ a{ text-decoration:none;}
   line-height: .8rem;
   text-align: center;
   color: #fff;
-  background:#af8327 ;
+  background:#C7AF7E ;
   border-radius:.15rem;
   font-size: .32rem;
   border:0;
@@ -204,7 +219,7 @@ button:disabled {
   margin:.4rem auto;
 }
 .resetPasswordPage .yd-btn-primary,.registerPage .yd-btn-primary {
-  background-color: #af8327;
+  background-color: #C7AF7E;
 }
 .resetPasswordPage .yd-cell:after,.registerPage .yd-cell:after{
   border-bottom:0
@@ -228,7 +243,7 @@ button:disabled {
 }
 .totalCommission{
   height: 2.34rem;
-  background: #715329;
+  background: #C7AF7E;
   color: #fff;
   font-size: .56rem;
   text-align: left;
@@ -244,7 +259,7 @@ button:disabled {
 }
 .totalCommission>div{
   font-size: .24rem;
-  color: #a89477;
+  color: #fff;
   padding-left: .2rem;
   margin-bottom: .25rem;
 }
@@ -286,7 +301,7 @@ button:disabled {
   line-height: 0.9rem;
   text-align: center;
   color: #fff;
-  background: #715329;
+  background: #C7AF7E;
   font-size: 18px;
   border-radius: 4px;
 }
@@ -328,4 +343,88 @@ button:disabled {
     content: 'smallscreen';
     display: none;
   }
+}
+.prdListTheme .yd-list-theme4 .yd-list-item{
+  padding-top: 0.7rem;
+}
+.prdListTheme .yd-list-theme4 .yd-list-item:not(:last-child):after{
+  border:1px solid transparent;
+}
+.prdListTheme .yd-list-theme4 .yd-list-item .yd-list-title{
+  padding-left: 0.15rem;
+}
+.prdListTheme .yd-list-img{
+  background: #ffffff !important;
+}
+.prdListTheme .yd-list-theme2 .yd-list-item .yd-list-title,.prdListTheme .indexTopicList p{
+  font-size: 0.25rem;
+  text-align: center;
+  padding:0 0.05rem;
+  color:#95651E ;
+  font-weight: normal;
+  height: 0.6rem;
+  line-height: 0.6rem;
+  background: #F1ECE2;
+  word-wrap: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.prdListTheme .yd-list-other{
+  padding: 0.3rem 0;
+}
+.prdListTheme .yd-list-theme2 .yd-list-item .yd-list-mes{
+  padding: 0;
+}
+.prdListTheme .yd-tab-panel-item{
+  background: #F5F6F7;
+}
+.fontColor-y{
+  color:#C7AF7E;
+}
+/*按钮统一格式*/
+.Btn{
+  display: inline-block;
+  border-radius: .04rem;
+  text-align: center;
+  border: 1px solid;
+}
+.sBtn{
+  width:1.38rem;
+  height: .48rem;
+  line-height:.48rem;
+  color:#C7AF7E;
+}
+.mBtn{
+
+}
+.lBtn{
+  width: 6.9rem;
+  line-height: .8rem;
+  height: .8rem;
+  background: #C7B07E;
+  border-color: #C7B07E;
+  color: #fff;
+  font-size: .28rem;
+}
+.indexPage .yd-tab-panel{
+  background: transparent;
+}
+/*解决二级菜单固定 不随着浏览器的滑动而股东*/
+.index .yd-scrollview{
+  overflow-y: hidden;
+}
+.index  .yd-tab-panel,.userOrdersPage .yd-tab-panel{
+  height: calc(100% - 0.8rem);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.index .itemDiv .yd-tab-nav,.userOrdersPage .yd-tab-nav{
+  position: absolute;
+  top:.9rem;
+  width: 100%;
+  z-index: 99;
+}
+.indexPage,.itemDiv,.itemDiv .yd-tab,.userOrdersPage,.userOrdersPage .yd-tab,.userOrdersPage>div{
+  height: 100%;
 }

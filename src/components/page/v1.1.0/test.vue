@@ -1,4 +1,3 @@
-<template>
   <yd-layout >
     <v-topbar :title="titleAttr" slot="navbar">
       <router-link :to="{path:'/search'}">
@@ -13,8 +12,8 @@
 </template>
 
 <script>
-  import VNavbar from './navBar.vue'
-  import VTopbar from './topBar.vue'
+  import VNavbar from './../../base/navBar.vue'
+  import VTopbar from './../../base/topBar.vue'
   export default {
     data () {
     return {

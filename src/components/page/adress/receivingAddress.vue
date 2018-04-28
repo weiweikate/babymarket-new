@@ -234,8 +234,6 @@
     margin-top:0.15rem;
   }
   .addAddress{
-    padding:0.2rem;
-    background: #fff;
     position: fixed;
     width:100%;
     bottom:0;
@@ -244,12 +242,11 @@
   }
   .addAddress span{
     display: inline-block;
-    height:0.8rem;
+    height:0.94rem;
     width:100%;
-    line-height:0.8rem;
-    color:#b38a32;
-    border:1px solid #b38a32;
-    border-radius:0.1rem;
+    line-height:0.94rem;
+    background: #C7AF7E;
+    color: #fff;
     font-size: 0.32rem;
   }
 </style>

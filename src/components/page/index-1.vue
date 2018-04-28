@@ -1,5 +1,5 @@
 <template>
- <div style="height: 100%" class="index">
+ <div style="height: 100%">
    <yd-layout >
      <v-topbar :title="titleAttr"  slot="navbar">
        <router-link :to="{path:'/search'}">
@@ -45,9 +45,9 @@
                </div>
              </div>
              <div v-else-if="item.Name == '众筹'">
-               <v-crowdfunding-list :crowdfundingList="subPrdInfos[index-1]"></v-crowdfunding-list>
+               <v-crowdfunding-list></v-crowdfunding-list>
              </div>
-             <div v-else>
+             <div v-else-if="subPagePics[index-1]!== undefined ">
                <!-- 二级标题页面轮播-->
                <v-slider :getSubPagePics="subPagePics[index-1]" ></v-slider>
                <!-- 二级标题产品展示-->
@@ -159,17 +159,11 @@
       },
       getCrowdfundingProducts(url,tabkey,index){
         // 获取众筹
-        this.$dialog.loading.open('拼命加载中')
         this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${ProductCategoryInsideId} == '"+tabkey+"' || ${Product_CategoryId} == '"+tabkey+"'","IsIncludeSubtables":false,"IsReturnTotal":true,"Items":["Id","ShowName","Subtitle","SalePrice","LYPrice","PriceInside","ImgId","Inv","Unit","ProductCategoryInsideId","Import","LimitQnty","Order","AccPrice"],"MaxCount":"9999","Operation": _prdInfo,"Order":"${Order} ASC"})
           .then((res) => {
-          console.log(res.data.Datas)
-          if(res.data.Datas.length>0){
-            this.$set(this.subPrdInfos,index,res.data.Datas)
-          }
-          this.$dialog.loading.close()
+          console.log(res.data)
         }).catch((err) => {
-          this.$dialog.loading.close()
-          this.$dialog.toast({mes: '操作失败,请重试', timeout: 1500})
+          alert(err)
         })
       },
       getSubInfoShow (url,tabkey,index) {
@@ -333,6 +327,9 @@
   }
 </script>
 <style>
+  .indexPage .yd-tab-panel{
+    background: transparent;
+  }
 
 </style>
 <style scoped>
@@ -413,13 +410,10 @@
     float: left;
     margin:.03rem .02rem;
     width:3.44rem;
-    height: 2.02rem;
-    overflow: hidden;
-    box-sizing: border-box;
+    height: 2rem;
   }
   .recommend ul li img{
     width: 100%;
   }
-
 </style>
 

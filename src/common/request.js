@@ -2,8 +2,8 @@
  * Created by lenovo on 2017/11/21.
  */
 // baseUrl
-// let baseUrl = 'http://www.babymarkt.com.cn'
-let baseUrl = 'http://202.91.250.138/bbmt'
+let baseUrl = 'http://www.babymarkt.com.cn'
+//let baseUrl = 'http://202.91.250.138/bbmt'
 export const _baseUrl = baseUrl
 // 物流查询地址和key
 export const _logisticsKey = '68b36abf923b43d8294cfa09482c945a'
@@ -119,6 +119,7 @@ export const _register = '3678dc19-7dcb-020c-26ff-3c1900385fe2'
 // 已省金额
 export const _savedAmount = 'def432e0-c6b8-4bef-8ed3-a75c009c3aed'
 // 我的奖励
+//export const _commissionLog = '82f1f24c-e796-4d4c-8afb-a75c009c282d'
 export const _commissionLog = '82f1f24c-e796-4d4c-8afb-a75c009c282d'
 // 我的资产
 export const _balanceLog = 'a0d1c6cb-0618-008d-3073-3e5e0059b80b'
@@ -126,3 +127,28 @@ export const _balanceLog = 'a0d1c6cb-0618-008d-3073-3e5e0059b80b'
 export const _userReport = 'e4295a73-e8eb-0877-0e3f-3c3501ceb312'
 // 我的收藏
 export const _userFavorite = 'ad5b7994-a09c-0aa9-35fe-3c3b0004d9af'
+// 首页精选
+export const _hotRead = "688370da-7663-4418-b703-a87800eaa2cd"
+
+//众筹记录(Raise)
+export const _MyRaiseRead = "09aa09d8-d217-4434-937b-a83f001b7ac4"
+
+//众筹奖励月汇总(RaiseCommissionMonth)
+export const _MyRaiseCommissionMonthRead = "3c1f5579-a597-497c-afae-a843000137b8"
+
+//众筹奖励订单汇总(RaiseCommissionOrder)
+export const  _MyRaiseCommissionOrderRead = "0098a7b6-2f82-407e-9ce4-a84300020148"
+//众筹订单详情回报明细
+export const  _MyRaiseCommission = "cbc47d01-fc31-4a3b-a3ab-a84900aaab05"
+
+//退款
+export const  _refundReasonReadOperation = 'd8f2d996-53f4-0d49-2b4a-3e7601740c18';
+export const  _refundAddOperation = 'a6998041-52b6-0a29-30cf-3e7800b26949';
+export const  _refundModifyOperation = '88c79a35-f915-473d-b8c3-a77500185b8c';
+export const  _refundReadOperation = '18525e79-8689-4e57-9f1f-a77500182f04';
+
+
+// let r = window.RequestReadFactory.login('marketapi','market909');
+//let r = window.RequestReadFactory.login('admin','babymarkt');
+// let r = window.RequestReadFactory.login('18657188791','zhujianting082');
+// 小程序  15167138106  密码123456

@@ -25,11 +25,6 @@
             <div class="myorderItem">
               <yd-flexbox>
                 <yd-flexbox-item>
-                  <router-link :to="{path:'/userOrders',query:{Id:0}}">
-                    <span class="ReturnGood"></span>全部
-                  </router-link>
-                </yd-flexbox-item>
-                <yd-flexbox-item>
                   <router-link :to="{path:'/userOrders',query:{Id:1}}">
                     <span class="my"></span>待付款
                   </router-link>
@@ -47,6 +42,11 @@
                 <yd-flexbox-item>
                   <router-link :to="{path:'/userOrders',query:{Id:4}}">
                     <span class="gotoShare"></span>已收货
+                  </router-link>
+                </yd-flexbox-item>
+                <yd-flexbox-item>
+                  <router-link :to="{path:'/orderRefund'}">
+                    <span class="ReturnGood"></span>退换货
                   </router-link>
                 </yd-flexbox-item>
               </yd-flexbox>
@@ -68,13 +68,13 @@
                 </router-link>
               </yd-flexbox-item>
               <yd-flexbox-item>
-                <router-link :to="{path:'/coupons'}">
-                  <span class="MyCoupon"></span>优惠卷
+                <router-link :to="{path:'/userCrowdfunding'}">
+                  <span class="myCrowdfunding"></span>我的众筹
                 </router-link>
               </yd-flexbox-item>
               <yd-flexbox-item>
-                <router-link :to="{path:'/receivingAddress'}">
-                  <span class="receivingAddress"></span>地址管理
+                <router-link :to="{path:'/coupons'}">
+                  <span class="MyCoupon"></span>优惠卷
                 </router-link>
               </yd-flexbox-item>
             </yd-flexbox>
@@ -87,6 +87,9 @@
             </yd-cell-item>
             <yd-cell-item arrow type="link" href="/userFavorite">
               <p slot="left" class="favorite">我的收藏</p>
+            </yd-cell-item>
+            <yd-cell-item arrow type="link" href="/receivingAddress">
+              <p slot="left" class="saved">地址管理</p>
             </yd-cell-item>
           </yd-cell-group>
           <yd-cell-group>
@@ -101,7 +104,7 @@
             </yd-cell-item>
           </yd-cell-group>
         </div>
-        <div v-if="isLogin" style="text-align: center;background:#fff;margin-bottom: .3rem">
+        <div v-if="isLogin" style="text-align: center;margin-bottom: .3rem">
           <span class="subBtn" @click.prevet="logout">退出当前账号</span>
         </div>
         <div class="LYMT">
@@ -187,7 +190,7 @@ export default {
   }
   .topBar{
     width: 100%;
-    background: #715329;
+    background: #C7AF7E;
     margin-bottom:.2rem;
   }
   .user {
@@ -269,7 +272,7 @@ export default {
   .myServerItem span.MyCoupon{
     background-image: url("../../../img/youhuijuan.png");
   }
-  .myServerItem span.receivingAddress{
+  .myServerItem span.myCrowdfunding{
     background-image: url("../../../img/zongchou.png");
   }
   .myServer p{

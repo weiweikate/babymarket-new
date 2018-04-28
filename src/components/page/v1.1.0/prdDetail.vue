@@ -9,8 +9,7 @@
         </div>
         <div class="prdIntr">
           <h5>{{prdInfos.ShowName}}</h5>
-          <div v-if="isCrowdfunding" class="crowdfundingPrice fontColor-y">{{'¥ '+prdInfos.SalePrice}} <span>起</span></div>
-          <ul v-else  class="priceDiv">
+          <ul class="priceDiv">
             <li v-if="isLogin.login &&( isLogin.MemberTypeKey == '3')">
               <span class="AccPrice">￥{{prdInfos.AccPrice}}</span>
               合作尊享
@@ -56,10 +55,9 @@
           <li class="shopCare">
             <router-link :to="{path:'/shoppingCare'}"></router-link>
           </li>
-          <li v-if="!isCrowdfunding" :class="isCollection.status? 'star-c':'star'" @click="collection"></li>
-          <li v-if="!isCrowdfunding" class="buy" @click="showType(true)">立即购买</li>
-          <li v-if="!isCrowdfunding" class="addCare" @click="showType(false)">加入购物车</li>
-          <li v-if="isCrowdfunding" class="crowdfundingBtn" @click="showType(true)">立即众筹</li>
+          <li :class="prdCol? 'star-c':'star'" @click="collection"></li>
+          <li class="buy" @click="showType(true)">立即购买</li>
+          <li class="addCare" @click="showType(false)">加入购物车</li>
         </ul>
       </div>
     </yd-layout>
@@ -73,7 +71,6 @@
             <img  src="../../../img/close-button.png" alt="" />
           </span>
         </div>
-        <!-- 产品的规格-->
         <div class="container">
           <div class="specification"  v-for="(specification,index) in SpecificationKey" :key="index">
             <p>{{specification.SpecificationName}}</p>
@@ -109,25 +106,32 @@
     data () {
       return {
         titleAttr: {'isShow': true, 'name': '商品详情页'},
+        prdId: '',
         isLogin: { login:false, session: '',userId: ''},
         writeUrl:'',
-        deltailPics: [],// 产品的轮播图片
-        prdId: '',// 产品id
-        prdInfos:{},// 产品信息
-        prdFreight:'',// 运费
-        province:'',// 用户的当前地理定位
-        SpecificationKey: '', // 产品的规格值
-        isCollection:{status:false,colId:''},// 是否被收藏 并保存收藏时候的id
+        deltailPics: [],
+        prdInfos:{},
+        prdFreight:'',
+        province:'',
+        SpecificationKey: '',
+        SpecificationItem1Id: '',
+        prdSpecificationItem: [],
+        prdCol:false,
+        prdColId: '',
         show: false,
         showBtn: false,
         number:0,
         typeIndex:[],//  判断规格按钮是否需要变色 下标对应每行的index
-        orderId: '', // 订单号
-        allSepcificationArray:'',// 获取产品的所有规格信息
+        priceItems:[''],
+        myPrice:'',
+        myStore: '',
+        myType: '',
+        orderId: '',
+        myTypeId: '',
+        allSepcificationArray:'',
         selectInfoDict:'',
         selectedArray:'',// 被选中的数组
-        specificationData:{}, // 被选中的产品规格
-        isCrowdfunding:false, // 是否是众筹
+        specificationData:''
       }
     },
     components: {
@@ -143,30 +147,32 @@
     mounted: function () {
       //判断是否登录 并给获取url
       this.getisEntry()
+      //获取产品id 无id跳转到首页
+      this.getPrdId()
+      //获取详情页轮播图
+      // this.getDetailPicsShow()
       //获取商品信息
       this.getDetailPrdInfos()
       // 是否被收藏
       this.getIsCollection()
       //获取产品的规格
       this.getSpecification()
+      this.getSpecificationItem1Id()
       this.$dialog.loading.open('拼命加载中')
       this.selectInfoDict = new Map()
     },
     methods: {
+      getPrdId() {
+        this.prdId = this.$route.query.prdId
+        if (this.prdId === undefined ) {
+          this.$router.push({path: '/index'})
+        }
+      },
       getisEntry (){
         // 判断是否登录 并获取session 和读取接口
         this.isLogin= isLogin(_readURL)
         if(this.isLogin.login){
           this.writeUrl = reqUrl(_writeURL,this.isLogin.session)
-        }
-        //获取产品id 无id跳转到首页
-        this.prdId = this.$route.query.prdId
-        if (this.prdId === undefined ) {
-          this.$router.push({path: '/index'})
-        }
-        // 判断是否是众筹项目
-        if(this.$route.query.isCrowdfunding == 'true'){
-          this.isCrowdfunding = true
         }
       },
       getDetailPicsShow () {
@@ -203,6 +209,26 @@
           alert(err)
         })
       },
+//      getAdress () {
+//        // 获取地理位置
+//        let _this  = this
+//        let geolocation = new BMap.Geolocation()
+//        let gc = new BMap.Geocoder()
+//        geolocation.getCurrentPosition(function (r) {
+//          if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+//            let pt = r.point
+//            gc.getLocation(pt, function (rs) {
+//              let addComp = rs.addressComponents
+//              let address = {province:addComp.province, city:addComp.city, area:addComp.district }
+//              _this.province = address.province
+//              _this.getFreight ()
+//              window.sessionStorage.address = JSON.stringify(address)
+//            })
+//          }else{
+//            alert('GPS信号弱')
+//          }
+//        }, { enableHighAccuracy: true })
+//      },
       getFreight () {
         // 获取运费
         let url = this.isLogin.reqUrl
@@ -226,8 +252,8 @@
         this.axios.post(url,{"Condition":"${CreatorId} == '"+this.isLogin.userId+"' && ${FavoriteObjectId} == '"+this.prdId+"'","Items":["Id"],"MaxCount":"1","Operation": _collection})
             .then((res) => {
           if (res.data.Datas.length > 0) {
-            this.isCollection.status = true
-            this.isCollection.colId = res.data.Datas[0].Id
+            this.prdCol= true
+            this.prdColId = res.data.Datas[0].Id
           }
         }).catch((err) => {
           alert(err)
@@ -238,45 +264,86 @@
         let url = this.isLogin.reqUrl
         this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${ProductId} == '"+this.prdId+"'","IsIncludeSubtables":true,"IsReturnTotal":true,"Items":["SpecificationKey","SpecificationName"],"Operation":_specificationGroup})
             .then((res) => {
+          console.log(res.data.Datas)
             if (res.data.Datas.length === 0) {
               this.SpecificationKey = null
+              //查默认规格
+              this.getDefaultSpecification()
             }else{
+              //this.SpecificationKey = res.data.Datas[0].SpecificationKey
               this.SpecificationKey = res.data.Datas
+//              for (let i =0; i<this.SpecificationKey.length;i++){
+//                this.typeIndex.push([])
+//              }
+              this.$dialog.loading.close()
+              //this.getSpecificationKey()
             }
-            this.getSpecificationItem1Id()
+        }).catch((err) => {
+          console.log(err)
+        })
+      },
+      getDefaultSpecification () {
+        let url = this.isLogin.reqUrl
+        this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${ProductId} == '"+this.prdId+"'","IsIncludeSubtables":true,"IsReturnTotal":true,"Items":["Id","Price","PriceInside","Inv","S_FullName","LYPrice"],"MaxCount":"1","Operation":_specification,"Subtables":["ShopLevelPrice"]}
+        )
+            .then((res) => {
+          this.$dialog.loading.close()
+          this.prdSpecificationItem = res.data.Datas
+        }).catch((err) => {
+          this.$dialog.loading.close()
+        })
+      },
+      getSpecificationKey () {
+        let url = this.isLogin.reqUrl
+        this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${ProductId} == '"+this.prdId+"' && ${SpecificationKey} == '"+this.SpecificationKey+"'","IsIncludeSubtables":false,"IsReturnTotal":true,"Items":["Id","S_Value_Name","Inv"],"Operation": _specificationKey })
+            .then((res) => {
+          this.SpecificationItem1Id = res.data.Datas
+          this.getSpecificationItem1Id()
         }).catch((err) => {
           console.log(err)
         })
       },
       getSpecificationItem1Id () {
         let url = this.isLogin.reqUrl
+        let _this = this
+//        let promises = this.SpecificationItem1Id.map(function (obj) {
+//          return _this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${SpecificationItem1Id} == '"+obj.Id+"'","IsIncludeSubtables":true,"IsReturnTotal":true,"Items":["Id","Price","PriceInside","Inv","S_FullName","LYPrice"],"MaxCount":"1","Operation": _specification,"Subtables":["ShopLevelPrice"]})
+//        })
+//        Promise.all(promises).then(function (posts) {
+//          _this.$dialog.loading.close()
+//          let price = []
+//          for (let i= 0; i< posts.length;i++) {
+//            price[i]= posts[i].data.Datas[0]
+//          }
+//          _this.prdSpecificationItem =price
+//        }).catch(function(reason){
+//          _this.$dialog.loading.close()
+//        })
         this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${ProductId} == '"+this.prdId+"'","IsIncludeSubtables":true,"IsReturnTotal":true,"Operation": _specification})
           .then((res) => {
+          console.log(res.data.Datas)
           let Datas = res.data.Datas
           Datas.forEach((specification) => {
             let _levelPrice = '';
 
-            let price = specification.Price
+            let price = specification.Price;
             //if (t.isValidArr(specification.ShopLevelPrice)) {
               specification.ShopLevelPrice.forEach((p)=>{
                 if (p.ShopLevelKey === this.isLogin.LevelKey) {
-                  price = p.Price2
+                  price = p.Price2;
                 }
               })
             //}
-            _levelPrice = price
+            _levelPrice = price;
 
             //普通会员显示老尤价（LYPrice）
             if (this.isLogin && this.isLogin.MemberTypeKey === "0") {
               _levelPrice = specification.LYPrice
             }
-            specification.levelPrice = _levelPrice
+            specification.levelPrice = _levelPrice;
           })
           this.allSepcificationArray = Datas
-          if(this.SpecificationKey === null){
-            this.specificationData = this.allSepcificationArray[0]
-          }
-          this.$dialog.loading.close()
+
         }).catch((err) => {
           console.log(err)
         })
@@ -285,7 +352,7 @@
         if(!this.toLogin ()){
           return
         }
-        if( this.isCollection.status){
+        if( this.prdCol){
           this.deleteCollection ()
         }else{
           this.addCollection ()
@@ -293,30 +360,30 @@
       },
       deleteCollection () {
         let url = this.writeUrl
-        this.axios.post(url,{"Items":[{"Data":{"EntityName":"Favorite","Items":{"Id":this.isCollection.colId},"Status":"Deleted"},"DeleteOperationId": _deleteCollection}]})
+        this.axios.post(url,{"Items":[{"Data":{"EntityName":"Favorite","Items":{"Id":this.prdColId},"Status":"Deleted"},"DeleteOperationId": _deleteCollection}]})
             .then((res) => {
           if(JSON.stringify(res.data) == "{}"){
             this.$dialog.toast({mes: '取消收藏', timeout: 1500})
-            this.isCollection.status= false
+            this.prdCol= false
           }
         }).catch((err) => {
           this.$dialog.toast({mes: '取消收藏失败，请重试', timeout: 1500})
-          this.isCollection.status= true
+          this.prdCol= true
         })
       },
       addCollection () {
         let url = this.writeUrl
         // 随机生成 收藏夹id
-       this.isCollection.colId= getUUID()
-        this.axios.post(url,{"Items":[{"AddOperationId":_addCollection,"Data":{"EntityName":"Favorite","Items":{"CreatorId":this.isLogin.userId,"FavoriteObjectId":this.prdId,"FavoriteObjectType":"Product","Id":this.isCollection.colId,"MemberId":this.isLogin.userId,"ProductId":this.prdId},"Status":"New"}}]})
+        this.prdColId= getUUID()
+        this.axios.post(url,{"Items":[{"AddOperationId":_addCollection,"Data":{"EntityName":"Favorite","Items":{"CreatorId":this.isLogin.userId,"FavoriteObjectId":this.prdId,"FavoriteObjectType":"Product","Id":this.prdColId,"MemberId":this.isLogin.userId,"ProductId":this.prdId},"Status":"New"}}]})
             .then((res) => {
           if(JSON.stringify(res.data) == "{}"){
             this.$dialog.toast({mes: '已收藏', timeout: 1500})
-            this.isCollection.status= true
+            this.prdCol= true
           }
         }).catch((err) => {
           this.$dialog.toast({mes: '收藏失败,请重试', timeout: 1500})
-          this.isCollection.status= false
+          this.prdCol= false
         })
       },
       showType (obj) {
@@ -325,6 +392,9 @@
         }
         this.showBtn = obj
         this.show = !this.show
+//        this.priceItems = userPrice(this.isLogin,this.prdSpecificationItem)
+//        this.myPrice = this.priceItems[0]
+//        this.myStore = this.prdSpecificationItem[0].Inv
       },
       choose (index0,key0) {
         let self = this
@@ -360,10 +430,11 @@
         //把选中规格所在组的其他规格状态修改为未选中
         let key = selectGroupItem.Id
         selectGroupItemArray.forEach((sValueDetail)=>{
+          console.log(key,sValueDetail.Id)
           if (sValueDetail.Id === key) {
-            sValueDetail.selected = true
+            sValueDetail.selected = true;
           }else {
-            sValueDetail.selected = false
+            sValueDetail.selected = false;
           }
         })
         let selectedArray = []
@@ -386,10 +457,18 @@
         if (this.specificationData) {
           didFind = true
         }
-        //this.myPrice = this.specificationData ? this.specificationData.levelPrice : this.prdInfos.SalePrice
+        this.myPrice = this.specificationData ? this.specificationData.levelPrice : this.prdInfos.SalePrice
+        this.myTypeId = this.specificationData.Id
+        this.myType = this.specificationData.S_FullName
+//        this.myPrice = this.priceItems[key]
+//        this.myStore = this.prdSpecificationItem[key].Inv
+//        this.myType = this.prdSpecificationItem[key].S_FullName
+//        this.myTypeId = this.prdSpecificationItem[key].Id
+        //console.log(this.myPrice,this.myStore,this.myType,this.myTypeId)
       },
       searchSepecificationIn(allSpecificationArr,groupItemArr){
         // 在所有规格中搜索规格选中的具体规格
+        console.log(groupItemArr)
         let self = this
         let result = null
         if (allSpecificationArr.length == 1) {
@@ -454,11 +533,11 @@
       },
       addShoppingCarts () {
         let url = this.writeUrl
-        if (this.SpecificationKey && !this.specificationData.S_FullName){
+        if (this.SpecificationKey && !this.myType){
           this.$dialog.toast({mes: '请选择产品规格', timeout: 1500})
           return
         }
-        this.axios.post(url,{"Items":[{"AddOperationId": _addShoppingCarts,"Data":{"EntityName":"Shopping_Cart","Items":{"CreatorId":this.isLogin.userId,"MemberId":this.isLogin.userId,"Price":this.specificationData.levelPrice,"ProductId":this.prdId,"Product_SId":this.specificationData.Id,"Qnty":String(this.number),"isSelect":false},"Status":"New"}}]})
+        this.axios.post(url,{"Items":[{"AddOperationId": _addShoppingCarts,"Data":{"EntityName":"Shopping_Cart","Items":{"CreatorId":this.isLogin.userId,"MemberId":this.isLogin.userId,"Price":this.myPrice,"ProductId":this.prdId,"Product_SId":this.myTypeId,"Qnty":String(this.number),"isSelect":false},"Status":"New"}}]})
             .then((res) => {
           if(JSON.stringify(res.data) == "{}"){
             this.$dialog.toast({mes: '已加入购物车', timeout: 1500})
@@ -480,7 +559,7 @@
         let time = getTimes()
         //产生一个订单编号
         this.orderId = getUUID()
-        this.axios.post(url,{"Items":[{"AddOperationId": _newOrder,"Data":{"EntityName":"Order","Items":{"Address_Refresh": time,"CreatorId": this.isLogin.userId,"Formal":"False","Id": this.orderId,"Line":[],"MemberId": this.isLogin.userId},"Status":"New"}}]})
+        this.axios.post(url,{"Items":[{"AddOperationId": _newOrder,"Data":{"EntityName":"Order","Items":{"Address_Refresh": time,"CreatorId": this.isLogin.userId,"Formal":"False","Id": this.orderId,"Line":[],"MemberId": this.isLogin.userId, 'Delivery_AddressId':this.isLogin.addressId},"Status":"New"}}]})
             .then((res) => {
           //console.log(res.data)
           if(JSON.stringify(res.data) == "{}"){
@@ -493,13 +572,14 @@
       },
       newOrderDetails () {
         let url = this.writeUrl
-        this.axios.post(url,{"Items":[{"AddOperationId": _newOrderDetails,"Data":{"EntityName":"Order_Line","Items":{"ImgId":this.prdInfos.ImgId,"OrderId": this.orderId,"Price": this.specificationData.levelPrice,"ProductId":this.prdId,"Product_SId":this.specificationData.Id,"Product_ShowName": this.prdInfos.ShowName,"Qnty":String(this.number),"S_Name":this.specificationData.S_FullName},"Status":"New"}}]})
+        console.log(this.myTypeId)
+        this.axios.post(url,{"Items":[{"AddOperationId": _newOrderDetails,"Data":{"EntityName":"Order_Line","Items":{"ImgId":this.prdInfos.ImgId,"OrderId": this.orderId,"Price": this.myPrice,"ProductId":this.prdId,"Product_SId":this.myTypeId,"Product_ShowName": this.prdInfos.ShowName,"Qnty":String(this.number),"S_Name":this.myType},"Status":"New"}}]})
             .then((res) => {
           console.log(res.data)
           if(JSON.stringify(res.data) == "{}"){
             this.$dialog.loading.close()
-            window.sessionStorage.buyPrd = JSON.stringify([{prdName:this.prdInfos.ShowName,img:this.prdInfos.ImgId,price:this.specificationData.levelPrice,type:this.specificationData.S_FullName,pcs:this.number,WarehouseId:this.prdInfos.StoreId}])
-            this.$router.push({path: '/confirmOrder', query: {prdId: this.prdId,orderId: this.orderId,isCrowdfunding:this.isCrowdfunding}})
+            window.sessionStorage.buyPrd = JSON.stringify([{prdName:this.prdInfos.ShowName,img:this.prdInfos.ImgId,price:this.myPrice,type:this.myType,pcs:this.number,WarehouseId:this.prdInfos.StoreId}])
+            this.$router.push({path: '/confirmOrder', query: {prdId: this.prdId,orderId: this.orderId}})
           }
         }).catch((err) => {
           this.$dialog.loading.close()
@@ -723,17 +803,5 @@
     color:#fff;
     background:#af8326;
     font-size:0.35rem;
-  }
-  .shopDiv ul li.crowdfundingBtn{
-    width: 80%;
-    background: #C7B07E;
-    color: #fff;
-    font-size: .28rem;
-  }
-  .crowdfundingPrice {
-    font-size:.34rem;
-    text-align: left;
-    background: #fff;
-    padding-left: .25rem;
   }
 </style>

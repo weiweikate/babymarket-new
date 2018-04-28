@@ -40,7 +40,7 @@
 </script>
 <style scoped>
   .navbar{
-    background: #715329;
+    background: #C7AF7E;
     height: 0.9rem;
     line-height: 0.9rem;
     color: #fff;

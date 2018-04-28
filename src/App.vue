@@ -1,18 +1,18 @@
 <template>
   <!--<yd-layout>-->
-    <div  ref="myView" id="myView" style="height: 100%;">
+    <!--<div  ref="myView" id="myView" style="height: 100%;">-->
       <div id="app" ref="app" style="height: 100%;">
         <keep-alive v-if="$route.meta.keepAlive" exclude="slider" >
           <router-view ></router-view>
         </keep-alive>
         <router-view v-if="!$route.meta.keepAlive"></router-view>
       </div>
-      <div v-if="show" id="pcBtn" ref="pcBtn">
-        <a href="#">点击回到顶部导航</a>
-        <br/>
-        <a @click.prevent="goBottom">点击跳到底部导航</a>
-      </div>
-    </div>
+      <!--<div v-if="show" id="pcBtn" ref="pcBtn">-->
+        <!--<a href="#">点击回到顶部导航</a>-->
+        <!--<br/>-->
+        <!--<a @click.prevent="goBottom">点击跳到底部导航</a>-->
+      <!--</div>-->
+    <!--</div>-->
   <!--</yd-layout>-->
 </template>
 
@@ -26,7 +26,7 @@
       }
     },
     mounted: function () {
-      this.getWidth()
+      //this.getWidth()
     },
     created: function () {
        this.getAdress()
@@ -71,10 +71,10 @@
 </script>
 
 <style>
-  #myView{
-    margin: auto;
-    position: relative;
-  }
+  /*#myView{*/
+    /*margin: auto;*/
+    /*position: relative;*/
+  /*}*/
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -96,19 +96,19 @@
   #app .yd-spinner{
     border-radius: 0.1rem;
   }
-  #pcBtn{
-    position: fixed;
-    top:10px;
-    right: 0px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  #pcBtn a{
-    display: inline-block;
-    padding:10px;
-    color:#715329;
-    border-radius: 8px;
-    border: 1px solid #715329;
-    margin-bottom: 20px;
-  }
+  /*#pcBtn{*/
+    /*position: fixed;*/
+    /*top:10px;*/
+    /*right: 0px;*/
+    /*cursor: pointer;*/
+    /*font-size: 16px;*/
+  /*}*/
+  /*#pcBtn a{*/
+    /*display: inline-block;*/
+    /*padding:10px;*/
+    /*color:#715329;*/
+    /*border-radius: 8px;*/
+    /*border: 1px solid #715329;*/
+    /*margin-bottom: 20px;*/
+  /*}*/
 </style>
