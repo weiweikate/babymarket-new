@@ -66,16 +66,16 @@
 </template>
 
 <script>
-  import VTopicItems from '../base/topicItems.vue'
-  import VCrowdfundingList from '../base/crowdfundingList.vue'
-  import VIcon from '../base/icon.vue'
-  import VSlider from '../base/slider.vue'
-  import VProductInfo from '../base/productInfo.vue'
-  import VTopbar from '../base/topBar.vue'
-  import VNavbar from '../base/navBar.vue'
+  import VTopicItems from '../../base/topicItems.vue'
+  import VCrowdfundingList from '../../base/crowdfundingList.vue'
+  import VIcon from '../../base/icon.vue'
+  import VSlider from '../../base/slider.vue'
+  import VProductInfo from '../../base/productInfo.vue'
+  import VTopbar from '../../base/topBar.vue'
+  import VNavbar from '../../base/navBar.vue'
   import { mapMutations } from 'vuex'
-  import { _readURL, _prdType, _LYnotice, _prdLabel, _prdTarget,_picBelowShow, _prdInfo, _topic, _hotRead } from '../../common/request.js'
-  import { isLogin, myMixinClickedJump} from '../../common/index.js'
+  import { _readURL, _prdType, _LYnotice, _prdLabel, _prdTarget,_picBelowShow, _prdInfo, _topic, _hotRead } from '../../../common/request.js'
+  import { isLogin, myMixinClickedJump} from '../../../common/index.js'
   export default {
     mixins: [myMixinClickedJump],
     data () {
