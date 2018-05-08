@@ -120,9 +120,11 @@ export const _register = '3678dc19-7dcb-020c-26ff-3c1900385fe2'
 export const _savedAmount = 'def432e0-c6b8-4bef-8ed3-a75c009c3aed'
 // 我的奖励
 //export const _commissionLog = '82f1f24c-e796-4d4c-8afb-a75c009c282d'
-export const _commissionLog = '82f1f24c-e796-4d4c-8afb-a75c009c282d'
+export const _commissionLog = '6b6d2035-ed98-4fbf-bcb4-a83f0016c3bc'
 // 我的资产
 export const _balanceLog = 'a0d1c6cb-0618-008d-3073-3e5e0059b80b'
+// 我的资产类型
+export const _balanceType='69dfeeb5-230d-450d-992e-a842017d9656'
 // 用户反馈
 export const _userReport = 'e4295a73-e8eb-0877-0e3f-3c3501ceb312'
 // 我的收藏
@@ -149,6 +151,6 @@ export const  _refundReadOperation = '18525e79-8689-4e57-9f1f-a77500182f04';
 
 
 // let r = window.RequestReadFactory.login('marketapi','market909');
-//let r = window.RequestReadFactory.login('admin','babymarkt');
-// let r = window.RequestReadFactory.login('18657188791','zhujianting082');
+//let r = window.RequestReadFactory.login('admin','babymarkt'); 18523832235 000528
+// let r = window.RequestReadFactory.login('18657188791','zhujianting082'); 17767261809 123456
 // 小程序  15167138106  密码123456
