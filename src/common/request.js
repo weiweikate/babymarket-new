@@ -154,7 +154,7 @@ export const  _refundReadOperation = '18525e79-8689-4e57-9f1f-a77500182f04';
 // 提现
 export const  _cashRead='22572f16-f23c-0907-11f1-3e570121be67'
 export const  _cashAdd='2ec381c4-c12f-4938-8f9f-a75c009f612d'
-
+export const  _qrcodeURL = 'https://app.xgrowing.com/node/wxapp/get_qrcode';
 // let r = window.RequestReadFactory.login('marketapi','market909');
 //let r = window.RequestReadFactory.login('admin','babymarkt'); 18523832235 000528  13813198345 	851204
 // let r = window.RequestReadFactory.login('18657188791','zhujianting082'); 17767261809 123456

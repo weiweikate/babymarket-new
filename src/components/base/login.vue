@@ -83,7 +83,6 @@
         this.axios.post(url, {"AppendixesFormatType":1,"Condition":"${Id} == '"+this.userInfos.userId+"'","IsIncludeSubtables":false,"IsReturnTotal":true,"MaxCount":"1","Operation":_userLevel}
         ).then((res) => {
             let level = res.data.Datas[0]
-            console.log(level)
             this.userInfos.MemberTypeKey = level.MemberTypeKey
             this.userInfos.LevelKey = level.LevelKey
             this.userInfos.Inside = level.Inside
@@ -91,6 +90,7 @@
             this.userInfos.name = level.Name
             this.userInfos.Mobile = level.Mobile
             this.userInfos.PictureId = level.PictureId
+            this.userInfos.InvitationCode = level.InvitationCode
             this.getAddress ()
             //window.sessionStorage.userInfos = escape(JSON.stringify(this.userInfos))
             //this.$router.go(0)

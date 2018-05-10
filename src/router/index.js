@@ -38,6 +38,7 @@ import registerStep3 from '../components/page/register/registerStep3.vue'
 import registerStep4 from '../components/page/register/registerStep4.vue'
 import payDetailInfos from '../components/page/usercenter/cellDetail/payDetailInfos.vue'
 import awardDetailInfos from '../components/page/usercenter/cellDetail/awardDetailInfos.vue'
+import userCode from '../components/page/usercenter/userCode.vue'
 
 let router = new VueRouter({
   routes: [
@@ -77,6 +78,7 @@ let router = new VueRouter({
     { path: '/registerStep4',name:'registerStep4',component: registerStep4 }, //  注册页面
     { path: '/payDetailInfos',name:'payDetailInfos',component: payDetailInfos }, //  支付明细
     { path: '/awardDetailInfos',name:'awardDetailInfos',component: awardDetailInfos },  // 我的奖励类型页面
+    { path: '/userCode',name:'userCode',component: userCode }, //邀请码
     { path: '/subjectAspx', name:'subjectAspx',component: subjectAspx } // subject.aspx
   ]
 })

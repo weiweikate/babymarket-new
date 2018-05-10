@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
+    "qrcodejs2": "0.0.2",
     "vue": "^2.5.2",
     "vue-axios": "^2.0.2",
     "vue-jsonp": "^0.1.7",

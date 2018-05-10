@@ -8,13 +8,20 @@
           <div class="user">
             <div class="userPic">
               <img :src="getPic(userInfos.PictureId)" alt=""/>
+              <div v-if="!isLogin">
+                <button class="loginBtn" @click="goToLogin">注册/登录</button>
+              </div>
+              <div v-else class="userName">
+                <span>{{userInfos.name}}</span>
+                <p>( 零售合伙人 )</p>
+              </div>
             </div>
-            <div v-if="!isLogin">
-              <button class="loginBtn" @click="goToLogin">注册/登录</button>
-            </div>
-            <div v-else="!isLogin" class="userName">
-              <span>{{userInfos.name}}</span>
-              <p>( 零售合伙人 )</p>
+            <div v-if="isLogin" class="userCode">
+
+              <router-link :to="{path: '/userCode', query: {user:userInfos.name,InvitationCode:userInfos.InvitationCode}}">
+                <img src="../../../img/code.png" alt=""/>
+                <p>邀请码</p>
+              </router-link>
             </div>
           </div>
           <div class="myOrder">
@@ -200,13 +207,16 @@ export default {
     background: #C7AF7E;
     margin-bottom:.2rem;
   }
-  .user{
+  .user,.userPic{
     display: flex;
     align-items: center;
-    padding:.4rem .3rem
+  }
+  .user{
+    padding:.4rem .3rem;
+    justify-content: space-between;
   }
   .user p{
-    font-size: .22rem;
+    font-size: .20rem;
   }
   /*.user {*/
     /*text-align: left;*/
@@ -331,6 +341,12 @@ export default {
     margin: 0 auto;
     text-align: center;
     letter-spacing:.15rem;
+  }
+  .userCode{
+    color: #fff;
+  }
+  .userCode img{
+    width:.6rem;
   }
 </style>
 
