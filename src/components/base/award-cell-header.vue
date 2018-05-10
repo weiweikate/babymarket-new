@@ -1,7 +1,7 @@
 <template>
   <div class="userCommissioin">
     <p>{{items.Month}}</p>
-    <p>收益：{{items.Commissioin}}</p>
+    <p>收益:{{items.Commissioin}}  <span v-if="items.Expend>0">支出:{{items.Expend}}</span></p>
   </div>
 </template>
 
@@ -41,5 +41,8 @@
     color:#252525;
     font-weight: bold;
     font-size: .28rem;
+  }
+  .userCommissioin p span{
+    margin-left: .1rem;
   }
 </style>

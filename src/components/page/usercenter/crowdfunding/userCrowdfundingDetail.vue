@@ -104,7 +104,7 @@
       },
       cellCliked(index,key){
         let item = this.crowdfundingMonthList[index].Detail[key]
-        this.$router.push({path:'/userCrowdfundingDetailInfos',query:{orderId:item.OrderId,commissioin:item.Commissioin,buyer:item.BuyerName}})
+        this.$router.push({path:'/userCrowdfundingDetailInfos',query:{orderId:item.OrderId,commissioin:item.Commissioin,buyerName:item.BuyerName,type:0}})
       }
     }
   }

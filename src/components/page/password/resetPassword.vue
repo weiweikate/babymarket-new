@@ -64,6 +64,7 @@
     },
     methods: {
       getIsEntry(){
+        console.log(1)
         // 判断是否登录 并获取session 和读取接口
         this.userInfos = isLogin(_readURL)
         if (this.userInfos.login || window.sessionStorage.userIntr) {
@@ -81,6 +82,7 @@
         this.writeUrl = reqUrl(_writeURL, this.userInfos.session)
       },
       getCode () {
+        console.log(2)
         this.codeId = getUUID()
         let url = this.writeUrl
         this.showItems = [false,false,true,false]
@@ -95,6 +97,7 @@
         })
       },
       checkCode () {
+        console.log(3)
         let url = this.userInfos.reqUrl
         if (!this.codeId){
           this.codeId = JSON.parse(window.sessionStorage.code).Id
@@ -114,6 +117,7 @@
         })
       },
       checkNumber () {
+        console.log(4)
         // 判断会员账号是否存在
         if (!validateMobile(this.phone).statu) {
           this.$dialog.toast({mes: validateMobile(this.phone).mes, timeout: 1500})
@@ -136,6 +140,7 @@
         })
       },
       comfirmPwd () {
+        console.log(5)
         let url = this.writeUrl
         if (!validatePwd(this.pwd).statu) {
           this.$dialog.toast({mes: validatePwd(this.pwd).mes, timeout: 1500})
@@ -175,6 +180,7 @@
         })
       },
       makeSure () {
+        console.log(6)
         if(this.code.length >= 6) {
           this.disabled = false
         } else {

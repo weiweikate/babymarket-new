@@ -238,7 +238,7 @@ const ordersStatus = function (num) {
       orderStatus = '待收货'
       break
     case 3:
-      orderStatus = '待评价'
+      orderStatus = '待分享'
       break
     case 4:
       orderStatus = '已评价'

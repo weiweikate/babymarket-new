@@ -119,10 +119,13 @@ export const _register = '3678dc19-7dcb-020c-26ff-3c1900385fe2'
 // 已省金额
 export const _savedAmount = 'def432e0-c6b8-4bef-8ed3-a75c009c3aed'
 // 我的奖励
-//export const _commissionLog = '82f1f24c-e796-4d4c-8afb-a75c009c282d'
+export const _commissionRead= '82f1f24c-e796-4d4c-8afb-a75c009c282d'
+export const _commissionDetail = '6e148561-cd00-48d8-9eb6-a83f00167e98'
 export const _commissionLog = '6b6d2035-ed98-4fbf-bcb4-a83f0016c3bc'
+export const _awardTypeRead = "a29310bf-cc07-4f6e-a265-a83f00f91795";
 // 我的资产
 export const _balanceLog = 'a0d1c6cb-0618-008d-3073-3e5e0059b80b'
+export const _balanceDetail='1067607b-d094-4393-9214-a83f0019b090'
 // 我的资产类型
 export const _balanceType='69dfeeb5-230d-450d-992e-a842017d9656'
 // 用户反馈
@@ -148,9 +151,11 @@ export const  _refundReasonReadOperation = 'd8f2d996-53f4-0d49-2b4a-3e7601740c18
 export const  _refundAddOperation = 'a6998041-52b6-0a29-30cf-3e7800b26949';
 export const  _refundModifyOperation = '88c79a35-f915-473d-b8c3-a77500185b8c';
 export const  _refundReadOperation = '18525e79-8689-4e57-9f1f-a77500182f04';
-
+// 提现
+export const  _cashRead='22572f16-f23c-0907-11f1-3e570121be67'
+export const  _cashAdd='2ec381c4-c12f-4938-8f9f-a75c009f612d'
 
 // let r = window.RequestReadFactory.login('marketapi','market909');
-//let r = window.RequestReadFactory.login('admin','babymarkt'); 18523832235 000528
+//let r = window.RequestReadFactory.login('admin','babymarkt'); 18523832235 000528  13813198345 	851204
 // let r = window.RequestReadFactory.login('18657188791','zhujianting082'); 17767261809 123456
 // 小程序  15167138106  密码123456

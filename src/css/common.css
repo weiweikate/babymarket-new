@@ -263,6 +263,10 @@ button:disabled {
   padding-left: .2rem;
   margin-bottom: .25rem;
 }
+.totalCommission>div>.choose{
+  font-size: .3rem;
+  padding-right: .3rem;
+}
 .totalCommission>span{
   padding-left: .3rem;
 }

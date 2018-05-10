@@ -7,13 +7,14 @@
         <div class='topBar'>
           <div class="user">
             <div class="userPic">
-              <img :src="imgSrc" alt=""/>
+              <img :src="getPic(userInfos.PictureId)" alt=""/>
             </div>
             <div v-if="!isLogin">
               <button class="loginBtn" @click="goToLogin">注册/登录</button>
             </div>
             <div v-else="!isLogin" class="userName">
-              <span>{{userName}}</span>
+              <span>{{userInfos.name}}</span>
+              <p>( 零售合伙人 )</p>
             </div>
           </div>
           <div class="myOrder">
@@ -128,13 +129,12 @@ import VNavbar from '../../base/navBar.vue'
 import VLogin from '../../base/login.vue'
 import { mapMutations } from 'vuex'
 import { _loginURL, _userLevel, _readURL } from '../../../common/request.js'
-import { reqUrl } from '../../../common/index.js'
+import { reqUrl,getImgs } from '../../../common/index.js'
 
 export default {
   data () {
     return {
       titleAttr: {'isShow': false, 'name': '我的'},
-      userName: '',
       imgSrc: require('../../../img/avatar-placeholder.png'),
       isLogin: false,
       userInfos:{},
@@ -156,7 +156,7 @@ export default {
   mounted: function () {
     let entry = isLogin()
     if (entry.login) {
-      this.userName = JSON.parse(unescape(window.sessionStorage.userInfos)).name
+      this.userInfos = JSON.parse(unescape(window.sessionStorage.userInfos))
       this.isLogin = true
     }
   },
@@ -170,6 +170,13 @@ export default {
     logout () {
       window.sessionStorage.removeItem('userInfos')
       location.reload()
+    },
+    getPic(id){
+      if(id == '00000000-0000-0000-0000-000000000000'||id == undefined ){
+        return this.imgSrc
+      } else {
+        return getImgs(id)
+      }
     }
   }
 }
@@ -193,14 +200,22 @@ export default {
     background: #C7AF7E;
     margin-bottom:.2rem;
   }
-  .user {
-    text-align: left;
-    box-sizing: border-box;
-    padding:.5rem .3rem;
+  .user{
+    display: flex;
+    align-items: center;
+    padding:.4rem .3rem
   }
-  .user>div{
-    display: inline-block;
+  .user p{
+    font-size: .22rem;
   }
+  /*.user {*/
+    /*text-align: left;*/
+    /*box-sizing: border-box;*/
+    /*padding:.5rem .3rem;*/
+  /*}*/
+  /*.user>div{*/
+    /*display: inline-block;*/
+  /*}*/
   .myOrder{
     height:2.56rem;
     background: #fff;
@@ -220,9 +235,10 @@ export default {
   }
   .userPic img{
     vertical-align: middle;
-    width: 1.4rem;
-    height: 1.4rem;
+    width: 1.2rem;
+    height: 1.2rem;
     border-radius: 1.4rem;
+    background: #fff;
   }
   .userName{
     font-size: .34rem;
