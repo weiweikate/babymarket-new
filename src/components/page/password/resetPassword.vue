@@ -2,7 +2,7 @@
   <div style="height: 100%">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar"></v-topbar>
-      <div class="resetPasswordPage">
+      <div class="resetPasswordPage scrollViewDiv">
         <div class="putPhone" v-if="show">
           <input type="text" placeholder="请输入账号" v-model="phone"/>
           <span class="subBtn" @click.prevent="checkNumber">下一步</span>

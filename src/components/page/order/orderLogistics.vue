@@ -6,7 +6,7 @@
         <img  src="../../../img/jiantou.png" alt=""/>
       </span>
       </v-topbar>
-      <div class="orderLogisticsPage">
+      <div class="orderLogisticsPage scrollViewDiv">
         <div class="logistics">
           <!-- 物流单号-->
           <div class="logisticsCompany">

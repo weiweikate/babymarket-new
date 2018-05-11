@@ -8,7 +8,7 @@
         </div>
         <span class="cancel" @click.prevent="cancelHandler">取消</span>
       </div>
-      <div class="search">
+      <div class="search scrollViewDiv">
 
         <div class="searchContent" v-show="show">
           <!-- 最近搜索-->

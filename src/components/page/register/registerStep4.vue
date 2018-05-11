@@ -2,7 +2,7 @@
   <div style="height: 100%">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar"></v-topbar>
-      <div class="registerPage">
+      <div class="registerPage scrollViewDiv">
         <div class="resetPwd">
           <p>设置密码</p>
           <yd-cell-group>

@@ -2,7 +2,7 @@
   <div style="height:100%">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar"></v-topbar>
-      <div class="topicDelPage">
+      <div class="topicDelPage scrollViewDiv">
         <div class="content">
           <img :src="imgSrc" alt=""/>
           <div>

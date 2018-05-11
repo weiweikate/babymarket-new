@@ -3,7 +3,7 @@
   <div style="height:100%">
     <yd-layout >
       <v-topbar :title="titleAttr" slot="navbar"></v-topbar>
-      <div class="order-refund">
+      <div class="order-refund scrollViewDiv">
         <div v-for="( order, index) in orderInfos" :key="index" class="refundList">
           <router-link :to="{path:'/orderRefundDetail',query:{Id:order.Id,refund:true}}">
             <p class="refund-type">

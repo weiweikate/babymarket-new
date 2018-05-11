@@ -33,12 +33,11 @@ a{ text-decoration:none;}
 .fr{
   float: right;
 }
-#scrollView>div{
+#scrollView>div.scrollViewDiv{
   margin-top: .894rem;
   padding-bottom: 1.2rem
 }
 .yd-dialog-black-mask .yd-confirm{
-  width:70%;
   font-size:0.35rem;
   border-radius: 0.3rem;
 }
@@ -389,7 +388,7 @@ button:disabled {
 /*按钮统一格式*/
 .Btn{
   display: inline-block;
-  border-radius: .04rem;
+  border-radius: .05rem;
   text-align: center;
   border: 1px solid;
 }

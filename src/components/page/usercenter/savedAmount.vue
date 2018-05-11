@@ -2,7 +2,7 @@
   <div style="height:100%;">
     <yd-layout>
       <v-topbar :title="titleAttr" ref="topBar" slot="navbar"></v-topbar>
-      <div class="savedAmountPage">
+      <div class="savedAmountPage scrollViewDiv">
         <div class="totalCommission">
           <div>已省金额 （元）</div>
           <span> ¥ {{totalSavedAmount}} 元</span>

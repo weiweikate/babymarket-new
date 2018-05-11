@@ -2,7 +2,7 @@
   <div style="height: 100%;background: #fff">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar" ref="topBar"></v-topbar>
-      <div class="userCrowdfundingDetailInfos">
+      <div class="userCrowdfundingDetailInfos scrollViewDiv">
         <p v-if="queryString.type=='0'">回报明细</p>
         <p class="award" v-else>码头奖励</p>
         <div>

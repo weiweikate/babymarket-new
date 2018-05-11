@@ -3,7 +3,7 @@
   <div style="height: 100%">
     <yd-layout >
       <v-topbar :title="titleAttr" slot="navbar"></v-topbar>
-      <div class="addresspage">
+      <div class="addresspage scrollViewDiv">
 
         <!-- 默认地址-->
         <div class="addr">

@@ -2,7 +2,7 @@
   <div style="height: 100%">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar"></v-topbar>
-      <div class="registerPage">
+      <div class="registerPage scrollViewDiv">
         <div class="putPhone">
           <input type="text" v-model="phone" placeholder="请输入您的手机号码" />
           <span class="subBtn" @click.prevent="checkPhone">下一步</span>

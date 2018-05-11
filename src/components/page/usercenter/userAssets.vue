@@ -3,11 +3,11 @@
     <!-- 我的奖励 -->
     <yd-layout>
       <v-topbar :title="titleAttr" ref="topBar" slot="navbar"></v-topbar>
-      <div class="userAssetsPage">
+      <div class="userAssetsPage scrollViewDiv">
         <div class="totalCommission">
           <div>我的资产 （元） <span class="choose fr" @click.prevent="showFilter(true)">筛选</span></div>
           <span> ¥ {{totalBalance}} 元</span>
-          <!--<span class="fr">提现</span>-->
+          <span class="fr" style="font-size: .24rem" @click.prvent="withdrawClicked">提现</span>
         </div>
         <div class="list">
           <v-award-cell-datepiker :datetime="datetime" @choose="choose"></v-award-cell-datepiker>
@@ -206,6 +206,9 @@
           let value = this.type[index].Value
           this.getBalanceDetail(time,value)
         }
+      },
+      withdrawClicked(){
+        this.$router.push({path:'/withdraw'})
       }
     }
   }
@@ -215,5 +218,16 @@
   .list{
     text-align: left;
     position: relative;
+  }
+  .totalCommission>span.fr{
+    font-size: 0.26rem;
+    /* padding-top: .2rem; */
+    border: .01rem solid #fff;
+    border-radius: .2rem;
+    text-align: center;
+    padding: 0 0.15rem;
+    margin-top: .3rem;
+    margin-right: .2rem;
+    padding-bottom: .02rem;
   }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <!-- 客户所有的订单-->
-  <div class="userOrdersPage">
+  <div class="userOrdersPage scrollViewDiv">
     <!-- 订单展示页面-->
     <div v-show="showItems[0]">
       <v-topbar :title="titleAttr"></v-topbar>

@@ -2,7 +2,7 @@
  <div style="height: 100%">
    <yd-layout>
      <v-topbar :title="titleAttr" slot="navbar"></v-topbar>
-     <div class="demo-iframe-holder " style="box-sizing:border-box;width:100%">
+     <div class="demo-iframe-holder scrollViewDiv" style="box-sizing:border-box;width:100%">
        <div class="prdInfoDiv" style="width:100%">
          <iframe ref="topicInfo" id="show-iframe" @load="resetUrl()" :src="iframeUrl"  style="width:100%;border:0" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
        </div>

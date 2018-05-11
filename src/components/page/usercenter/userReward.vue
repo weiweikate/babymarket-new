@@ -2,7 +2,7 @@
   <div style="height: 100%">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar" ref="topBar"></v-topbar>
-      <div class="userRewardPage">
+      <div class="userRewardPage scrollViewDiv">
         <div class="totalCommission">
           <div>我的奖励 （元）<span class="choose fr" @click.prevent="showFilter(true)">筛选</span></div>
           <span> ¥ {{totalcommission}} 元</span>

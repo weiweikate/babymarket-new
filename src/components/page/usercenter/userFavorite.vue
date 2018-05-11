@@ -2,7 +2,7 @@
   <div style="height: 100%">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar" ref="topBar"></v-topbar>
-      <div class="userRewardPage">
+      <div class="userRewardPage scrollViewDiv">
         <div class="orderDetail">
           <div class="productInfo" v-for="( favoriteList, index) in favoriteLists" :key="index" v-if="favoriteList.ProductId!='00000000-0000-0000-0000-000000000000'">
             <router-link :to="{path:'/prdDetail',query:{prdId:favoriteList.ProductId}}">

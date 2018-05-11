@@ -3,7 +3,7 @@
   <div style="height: 100%">
     <yd-layout>
       <v-topbar :title="titleAttr"  slot="navbar"></v-topbar>
-      <div class="paymentResultPage">
+      <div class="paymentResultPage scrollViewDiv">
         <div class="paysucc">
           <span>付款成功，打包发货中....</span>
         </div>

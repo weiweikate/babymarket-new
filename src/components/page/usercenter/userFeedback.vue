@@ -2,7 +2,7 @@
   <div style="height: 100%">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar" ref="topBar"></v-topbar>
-      <div class="feedBackPage">
+      <div class="feedBackPage scrollViewDiv">
         <div class="feedBackContent">
           <p>请选择您要反馈的问题类型（必填）</p>
           <ul>

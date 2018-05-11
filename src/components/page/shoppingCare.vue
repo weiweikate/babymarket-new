@@ -2,12 +2,12 @@
   <div class="shoppingCarePage" style="height:100%;overflow: scroll;padding-bottom:0.85rem">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar"><span id="opt" v-show="userInfos.login" @click.prevent="edit">{{opt}}</span></v-topbar>
-      <div>
+      <div class="scrollViewDiv">
         <div v-if="show" class="nullCar">
           <p>购物车里空空如也，赶紧</p>
           去<router-link to="index" >逛逛</router-link>
         </div>
-        <div class="shoppingList">
+        <div class="shoppingList ">
           <div v-for="(shoppingList,keys) in shoppingLists" :key="keys" >
             <div class="allBox" >
               <label class="yd-checklist-item-icon"  @click.prevent="chooseAll(keys)">

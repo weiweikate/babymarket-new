@@ -81,9 +81,9 @@
   }
 </script>
 <style scoped>
-  #scrollView>div{
-   padding-bottom: 0 !important;
-  }
+  /*#scrollView>div{*/
+   /*padding-bottom: 0 !important;*/
+  /*}*/
   .awardDetailInfosPage{
     text-align: left;
   }

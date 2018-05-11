@@ -6,7 +6,7 @@
       <v-topbar :title="titleAttr">
         <span class="opt" @click.prevent="toSaveAddr">保存</span>
       </v-topbar>
-      <div class="writeAddr" >
+      <div class="writeAddr scrollViewDiv" >
         <yd-cell-group>
           <yd-cell-item>
             <span slot="left">

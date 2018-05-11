@@ -8,7 +8,7 @@
       </span>
        </router-link>
      </v-topbar>
-     <div class="indexPage prdListTheme">
+     <div class="indexPage prdListTheme scrollViewDiv">
        <div class="itemDiv">
          <!-- tab 切换栏目 需请求后台-->
          <yd-tab active-color="#715329" :callback="getSubInfo" ref="ydTab">

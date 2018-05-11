@@ -3,7 +3,7 @@
   <div style="height:100%">
     <yd-layout >
       <v-topbar :title="titleAttr" slot="navbar"></v-topbar>
-      <div class="confirmOrder">
+      <div class="confirmOrder scrollViewDiv">
         <div class="orderDetail">
           <router-link v-if='!isCrowdfunding' :to="{path:'receivingAddress',query:{from:'/confirmOrder',Id:orderId}}">
             <div class="address">

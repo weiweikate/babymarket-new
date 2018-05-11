@@ -5,7 +5,7 @@
       <v-topbar :title="titleAttr" ref="topBar" slot="navbar">
         <span id="opt" v-if="orderPrice" @click.prevent="makeSure">确认</span>
       </v-topbar>
-      <div class="couponPage">
+      <div class="couponPage scrollViewDiv">
         <yd-tab active-color="#af8327">
           <yd-tab-panel label="未使用">
             <div class="coupon" v-for="(unused,index) in unusedCoupon" :key="index" @click.prevent="chooseCoupon(unused.Id,unused.Min_Money)">

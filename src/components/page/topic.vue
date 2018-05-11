@@ -2,7 +2,7 @@
   <div style="height:100%">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar"></v-topbar>
-      <div class="topicPage">
+      <div class="topicPage scrollViewDiv">
         <div class="content">
           <div v-for="(topicList,index) in topicLists" :key="index">
             <router-link :to="{path:'/topicDetail',query:{prdId:topicList.Id,title:topicList.Title}}">

@@ -3,7 +3,7 @@
   <div style="height: 100%">
     <yd-layout >
       <div class="orderDetailPage">
-        <div class="orderDetail">
+        <div class="orderDetail scrollViewDiv">
           <v-topbar :title="titleAttr"  slot="navbar"></v-topbar>
           <!-- 收货地址-->
           <div class="address">

@@ -39,6 +39,12 @@ import registerStep4 from '../components/page/register/registerStep4.vue'
 import payDetailInfos from '../components/page/usercenter/cellDetail/payDetailInfos.vue'
 import awardDetailInfos from '../components/page/usercenter/cellDetail/awardDetailInfos.vue'
 import userCode from '../components/page/usercenter/userCode.vue'
+import withdraw from '../components/page/withdraw/withdraw.vue'
+import withdrawToAlipay from '../components/page/withdraw/withdraw-to-alipay.vue'
+import bindAlipay from '../components/page/withdraw/bind-alipay.vue'
+import payPwdSet from '../components/page/withdraw/pay-password-set.vue'
+import withdrawSuc from '../components/page/withdraw/withdraw-success.vue'
+
 
 let router = new VueRouter({
   routes: [
@@ -79,6 +85,11 @@ let router = new VueRouter({
     { path: '/payDetailInfos',name:'payDetailInfos',component: payDetailInfos }, //  支付明细
     { path: '/awardDetailInfos',name:'awardDetailInfos',component: awardDetailInfos },  // 我的奖励类型页面
     { path: '/userCode',name:'userCode',component: userCode }, //邀请码
+    { path: '/withdraw',name:'withdraw',component: withdraw },// 提现  信息确认页面
+    { path: '/withdrawToAlipay',name:'withdrawToAlipay',component: withdrawToAlipay },// 提现
+    { path: '/bindAlipay',name:'bindAlipay',component: bindAlipay },// 提现  绑定支付宝账号
+    { path: '/payPwdSet',name:'payPwdSet',component: payPwdSet },// 提现  设置提现密码
+    { path: '/withdrawSuc',name:'withdrawSuc',component: withdraw },// 提现  提现成功
     { path: '/subjectAspx', name:'subjectAspx',component: subjectAspx } // subject.aspx
   ]
 })

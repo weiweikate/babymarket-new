@@ -3,7 +3,7 @@
   <div style="height: 100%">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar"></v-topbar>
-      <div class="orderPage">
+      <div class="orderPage scrollViewDiv">
         <div class="order">
           <span>订单已提交</span>
           <p>(请在30分钟内完成支付)</p>

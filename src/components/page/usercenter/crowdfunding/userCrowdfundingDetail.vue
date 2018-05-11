@@ -2,7 +2,7 @@
   <div style="height: 100%">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar" ref="topBar"></v-topbar>
-      <div class="userCrowdfundingDetail">
+      <div class="userCrowdfundingDetail scrollViewDiv">
         <v-user-crowdfunding-list  :crowdfoundingData="crowdfundingList" :inList="inList">
         </v-user-crowdfunding-list>
         <div class="lists">

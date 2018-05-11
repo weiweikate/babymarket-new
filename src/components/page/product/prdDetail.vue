@@ -3,7 +3,7 @@
   <div class="detailPage">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar"></v-topbar>
-      <div>
+      <div class="scrollViewDiv">
         <div class="picsShow">
           <v-slider :getSubPagePics="deltailPics"></v-slider>
         </div>

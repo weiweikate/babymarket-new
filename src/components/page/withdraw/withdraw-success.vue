@@ -2,7 +2,7 @@
   <div  class="codePage">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar"></v-topbar>
-      <div class="bg-view scrollViewDiv">
+      <div class="bg-view">
         <div class="name">{{userInfos.user}}</div>
         <div class="invite-code">分享码：{{userInfos.InvitationCode}}</div>
         <div id="qrcode"></div>

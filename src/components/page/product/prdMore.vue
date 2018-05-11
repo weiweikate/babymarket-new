@@ -2,7 +2,7 @@
   <div style="height: 100%" class="prdListTheme">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar"></v-topbar>
-      <div class="indexPage">
+      <div class="indexPage scrollViewDiv">
         <v-slider :getSubPagePics="SubPicsShow"></v-slider>
         <v-product-info-bk v-if="BKtheme"  :getBKPrdInfos="SubPrdInfo" :otherAtrr="BKAttr"></v-product-info-bk>
         <v-product-info v-else :getSubPrdInfos="SubPrdInfo" ></v-product-info>

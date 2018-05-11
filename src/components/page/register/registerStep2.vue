@@ -2,7 +2,7 @@
   <div style="height: 100%">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar"></v-topbar>
-      <div class="registerPage">
+      <div class="registerPage scrollViewDiv">
         <div class="code">
           <p style="margin-bottom: .2rem">您的手机号： {{userPhone}}</p>
           <p>将收到一条带有验证码的短信，点击获取验证码并输入</p>

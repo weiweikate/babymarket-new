@@ -3,7 +3,7 @@
   <div class="userCenter">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar"></v-topbar>
-      <div>
+      <div class="scrollViewDiv">
         <div class='topBar'>
           <div class="user">
             <div class="userPic">
@@ -218,14 +218,7 @@ export default {
   .user p{
     font-size: .20rem;
   }
-  /*.user {*/
-    /*text-align: left;*/
-    /*box-sizing: border-box;*/
-    /*padding:.5rem .3rem;*/
-  /*}*/
-  /*.user>div{*/
-    /*display: inline-block;*/
-  /*}*/
+
   .myOrder{
     height:2.56rem;
     background: #fff;
