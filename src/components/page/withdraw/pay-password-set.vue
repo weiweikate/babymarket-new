@@ -3,20 +3,14 @@
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar"></v-topbar>
       <div class="scrollViewDiv">
-        <p class="mobile">手机号码：<span>1111111</span></p>
+        <p class="mobile">手机号码：<span>{{userInfos.Mobile}}</span></p>
         <yd-cell-group>
           <yd-cell-item class="bg-view">
-            <input class="codeInput" type="text" slot="right" placeholder="请输入你收到的验证码" storage-key="dashuaibi" max="10">
-            <yd-sendcode slot="right"
-                         v-model="code"
-                         @click.native="sendCode1"
-                         type="warning">
+            <input class="codeInput" type="text" v-model="code" slot="right" placeholder="请输入你收到的验证码"  max="10">
+            <yd-sendcode slot="right" storage-key="dashuaibi"
+                          v-model="start" @click.native="getCode"
+                          type="warning">
             </yd-sendcode>
-
-          </yd-cell-item>
-          <yd-cell-item>
-            <span slot="left">用户名：</span>
-            <yd-input slot="right" required v-model="username" max="20" placeholder="请输入用户名"></yd-input>
           </yd-cell-item>
           <yd-cell-item>
             <span slot="left">新密码：</span>
@@ -24,14 +18,14 @@
           </yd-cell-item>
           <yd-cell-item>
             <span slot="left">确认密码：</span>
-            <yd-input slot="right" type="password" v-model="pwd" placeholder="请再次输入新密码"></yd-input>
+            <yd-input slot="right" type="password" v-model="repwd" placeholder="请再次输入新密码"></yd-input>
           </yd-cell-item>
         </yd-cell-group>
         <div class="tips">
-          密码由<span>6-18位</span>数字或字母组成
+          密码由<span>6-16位</span>数字或字母组成
         </div>
         <div>
-          <span class="lBtn Btn">提交</span>
+          <span class="lBtn Btn" @click.prevent="addPwd">提交</span>
         </div>
       </div>
     </yd-layout>
@@ -40,31 +34,77 @@
 
 <script>
   import VTopbar from '../../base/topBar.vue'
-  import { isLogin, reqUrl} from '../../../common/index.js'
-  import {  _readURL, _addCode, _checkCode, _passwordRetake,_userLevel  } from '../../../common/request.js'
+  import { isLogin, reqUrl, getUUID, isEmpty,validatePwd, validateRpwd } from '../../../common/index.js'
+  import {  _readURL, _addCode, _checkCode, _writeURL,_payPasswordAddOperation  } from '../../../common/request.js'
   export default {
     data () {
       return {
         titleAttr: {'isShow': true, 'name': '设置支付密码'},
         userInfos:'',
-        code:''
+        writeUrl:'',
+        code:'',
+        start:false,
+        pwd:'',
+        repwd:''
       }
     },
     components: {
       VTopbar
     },
     mounted: function () {
-    },
-    watch: {
-      code:'makeSure'
+      this.getIsEntry()
     },
     methods: {
-      Aqrcode() {
-
-      },
       getIsEntry(){
         // 判断是否登录 并获取session 和读取接口
         this.userInfos = isLogin(_readURL)
+        this.writeUrl = reqUrl(_writeURL,this.userInfos.session)
+      },
+      getCode () {
+        this.start = true
+        let url = this.writeUrl
+        this.axios.post(url,{"Items":[{"AddOperationId": _addCode,"Data":{"EntityName":"Check_Code","Items":{"Mobile":this.userInfos.Mobile,"TypeKey":"2"},"Status":"New"}}]}
+        ).then((res) => {
+          if(JSON.stringify(res.data) == "{}"){
+            this.$dialog.toast({mes: '验证码已发送', timeout: 1500})
+          } else{
+            this.$dialog.alert({mes: res.data.brief})
+          }
+        }).catch((err) => {
+          this.$dialog.toast({mes: '操作失败,请重试', timeout: 1500})
+        })
+      },
+      payPasswordAdd () {
+        let url = this.writeUrl
+        this.axios.post(url,{"Items":[{"AddOperationId":_payPasswordAddOperation,"Data":{"EntityName":"PayCode","Items":{"NewCode":this.pwd,"CheckPassword":this.repwd,"Mobile":this.userInfos.Mobile,"MemberId":this.userInfos.userId,"CheckCode":this.code},"Status":"New"}}]}
+        ).then((res) => {
+          console.log(res.data)
+          if(JSON.stringify(res.data) == "{}"){
+            this.$router.replace({path:'/withdraw'})
+          } else{
+            this.$dialog.alert({mes: res.data.brief});
+          }
+        }).catch((err) => {
+          this.$dialog.toast({mes: '操作失败,请重试', timeout: 1500})
+        })
+      },
+      addPwd(){
+        if(isEmpty(this.code) || isEmpty(this.pwd) || isEmpty(this.repwd)){
+          this.$dialog.toast({mes: '请输入验证码或者支付密码', timeout: 2500})
+          return
+        }  else {
+          let pwdTips = validatePwd(this.pwd)
+          let repwdTips = validateRpwd(this.pwd,this.repwd)
+          if(!pwdTips.statu){
+            this.$dialog.toast({mes: pwdTips.mes, timeout: 2500})
+            return
+          }
+          if(!repwdTips.statu){
+            this.$dialog.toast({mes:repwdTips.mes, timeout: 2500})
+            return
+          }
+        }
+        this.payPasswordAdd()
       }
     }
   }

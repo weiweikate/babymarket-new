@@ -208,7 +208,7 @@
         }
       },
       withdrawClicked(){
-        this.$router.push({path:'/withdraw'})
+        this.$router.push({path:'/withdraw',query:{num:this.totalBalance}})
       }
     }
   }

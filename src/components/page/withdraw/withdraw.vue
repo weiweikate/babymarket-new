@@ -71,7 +71,7 @@
         })
       },
       next() {
-        this.$router.push({path: '/withdrawToAlipay'})
+        this.$router.replace({path: '/withdrawToAlipay',query:{name:this.account.Name,account:this.account.AplipayAccount,num:this.$route.query.num}})
       }
     }
   }

@@ -2,7 +2,7 @@
   <div style="height: 100%;">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar" ref="topBar"></v-topbar>
-      <div class="awardDetailInfosPage">
+      <div class="awardDetailInfosPage scrollViewDiv">
         <p class="type">{{queryString.typeName}}</p>
         <ul class="infos">
           <li  v-for="(item,index) in datas" :key="index">

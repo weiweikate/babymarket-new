@@ -168,12 +168,11 @@ const validatePwd = function (pwd) {
     return {statu:false,mes:'密码长度必须大于6位'}
   } else if (password.length > 16) {
     return {statu:false,mes:'密码长度必须小于16位'}
-  }
-  // else {
-  //  if (!new RegExp(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/).test(password)) {
-  //    return {statu:false,mes:'密码格式不正确'}
-  //  }
-  // }
+  } else {
+    if (!new RegExp(/^[A-Za-z0-9]{6,16}$/).test(password)) {
+      return {statu:false,mes:'密码格式不正确'}
+    }
+   }
   return {statu:true}
 }
 // 验证重复密码格式

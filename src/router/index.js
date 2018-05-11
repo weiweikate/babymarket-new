@@ -89,7 +89,7 @@ let router = new VueRouter({
     { path: '/withdrawToAlipay',name:'withdrawToAlipay',component: withdrawToAlipay },// 提现
     { path: '/bindAlipay',name:'bindAlipay',component: bindAlipay },// 提现  绑定支付宝账号
     { path: '/payPwdSet',name:'payPwdSet',component: payPwdSet },// 提现  设置提现密码
-    { path: '/withdrawSuc',name:'withdrawSuc',component: withdraw },// 提现  提现成功
+    { path: '/withdrawSuc',name:'withdrawSuc',component: withdrawSuc },// 提现  提现成功
     { path: '/subjectAspx', name:'subjectAspx',component: subjectAspx } // subject.aspx
   ]
 })

@@ -96,7 +96,7 @@
       },
       checkCode () {
         let url = this.userInfos.reqUrl
-        if (!this.codeId){
+        if (!this.codeId  && window.sessionStorage.code){
           this.codeId = JSON.parse(window.sessionStorage.code).Id
         }
         this.axios.post(url,{"AppendixesFormatType":1,"Condition":"${Id} == '"+this.codeId+"'","IsIncludeSubtables":false,"IsReturnTotal":true,"Operation": _checkCode}
@@ -169,6 +169,8 @@
                 this.$router.push({path:'/userCenter'})
               }
             })
+          } else {
+            this.$dialog.alert({mes: res.data.brief})
           }
         }).catch((err) => {
           this.$dialog.toast({mes: '操作失败,请重试', timeout: 1500})

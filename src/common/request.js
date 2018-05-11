@@ -154,12 +154,13 @@ export const  _refundAddOperation = 'a6998041-52b6-0a29-30cf-3e7800b26949';
 export const  _refundModifyOperation = '88c79a35-f915-473d-b8c3-a77500185b8c';
 export const  _refundReadOperation = '18525e79-8689-4e57-9f1f-a77500182f04';
 // 提现记录
-export const  _cashRead='22572f16-f23c-0907-11f1-3e570121be67'
-export const  _cashAdd='2ec381c4-c12f-4938-8f9f-a75c009f612d'
+export const  _cashAdd ='22572f16-f23c-0907-11f1-3e570121be67'
+export const  _cashRead='2ec381c4-c12f-4938-8f9f-a75c009f612d'
 // 会员绑定支付宝
 export const  _alipayAccountRead = '6b3453e1-4643-4a57-a4d9-a75f00ff120d'
 export const  _alipayAccountAdd = '89f9cea6-ffa1-47c5-afe0-a75f00fee459'
-
+// 支付密码
+export const  _payPasswordAddOperation = 'd398c8f4-195e-4135-bbf4-a75f00fcc241'
 // let r = window.RequestReadFactory.login('marketapi','market909');
 //let r = window.RequestReadFactory.login('admin','babymarkt'); 18523832235 000528  13813198345 	851204
 // let r = window.RequestReadFactory.login('18657188791','zhujianting082'); 17767261809 123456

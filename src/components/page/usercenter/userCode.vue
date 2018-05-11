@@ -32,9 +32,6 @@
       this.userInfos = this.$route.query
       this.Aqrcode()
     },
-    watch: {
-      code:'makeSure'
-    },
     methods: {
       Aqrcode() {
         let qrcode0 = new QRCode('qrcode', {

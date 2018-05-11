@@ -2,8 +2,10 @@
   <div style="height: 100%;background: #fff">
     <yd-layout>
       <v-topbar :title="titleAttr" slot="navbar" ref="topBar"></v-topbar>
-      <v-cell-detail-header :queryString="queryString"></v-cell-detail-header>
-      <v-cell-detail-line :datas="orderLine"></v-cell-detail-line>
+      <div class="scrollViewDiv">
+        <v-cell-detail-header :queryString="queryString"></v-cell-detail-header>
+        <v-cell-detail-line :datas="orderLine"></v-cell-detail-line>
+      </div>
     </yd-layout>
   </div>
 </template>
