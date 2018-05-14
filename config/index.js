@@ -65,7 +65,7 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     // 网页版
-    assetsPublicPath: '/web/dist/',
+    assetsPublicPath: './',
     // app版路径
     //assetsPublicPath: './',
     /**

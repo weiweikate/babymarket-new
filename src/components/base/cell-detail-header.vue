@@ -4,7 +4,7 @@
     <div>
       <div class="raiseContent">
         <p class="raiseCommission clearFloat">
-          <span class="fl">付款金额</span>
+          <span class="fl">{{queryString.type ==2?  '提现金额':'付款金额'}}</span>
           <span class="fr">¥ {{queryString.commissioin}}</span>
         </p>
       </div>

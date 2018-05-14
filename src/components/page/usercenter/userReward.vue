@@ -8,7 +8,7 @@
           <span> ¥ {{totalcommission}} 元</span>
         </div>
         <div class="list">
-          <v-award-cell-datepiker :datetime="datetime" @choose="choose"></v-award-cell-datepiker>
+          <v-award-cell-datepiker  @choose="choose"></v-award-cell-datepiker>
           <div  v-for="(balanceLog,index) in commissionInfos" :key="index">
             <v-award-cell-header :items="balanceLog"></v-award-cell-header>
             <v-award-cell-line v-for="(item,keys) in balanceLog.CommissionDetail" v-if='item.Commission!=0' :key="keys" :datas="item" :index='index' :section='keys' @cellCliked="cellCliked"></v-award-cell-line>
@@ -35,8 +35,7 @@
         userInfos: '',
         totalcommission: '',
         commissionInfos: [],
-        datetime:{endDate:'2018-04',date:'2016-06'},
-        num:0,
+        datetime:{endDate:'',date:''},
         totalcommission:'',
         show:false,
         type:[]
@@ -59,17 +58,14 @@
       getIsEntry (){
         // 判断是否登录 并获取session 和读取接口
         this.userInfos= isLogin(_readURL)
-        let date = new Date()
-        let month = date.getMonth()+1+''
-        month = month.length==1? '0'+month: month
-        this.datetime.endDate= this.datetime.date = date.getFullYear() + '-' + month
       },
       getCommissionLog (date) {
         this.$dialog.loading.open('拼命加载中')
         let url = this.userInfos.reqUrl
+        let time = " && ${Month} <= '"+date+"'"
         let params ={"AppendixesFormatType":1,"Condition":"${MemberId} == '"+this.userInfos.userId+"'","IsIncludeSubtables":true,"IsReturnTotal":true,"Operation": _commissionLog }
         if(date){
-          params.Condition += date
+          params.Condition += time
         }
         this.axios.post(url,params).then((res) => {
           this.$dialog.loading.close()
@@ -101,11 +97,8 @@
 
       },
       choose(time){
-        if(this.num>1){
-          let date = " && ${Month} <= '"+time+"'"
-          this.getCommissionLog(date)
-        }
-        this.num += 1
+        this.datetime.date = time
+        this.getCommissionLog(time)
       },
       cellCliked(index,key){s
         let item = this.commissionInfos[index].CommissionDetail[key]

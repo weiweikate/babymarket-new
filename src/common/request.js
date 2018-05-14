@@ -2,7 +2,7 @@
  * Created by lenovo on 2017/11/21.
  */
 // baseUrl
-let baseUrl = 'http://www.babymarkt.com.cn'
+let baseUrl = 'https://www.babymarkt.com.cn'
 //let baseUrl = 'http://202.91.250.138/bbmt'
 export const _baseUrl = baseUrl
 // 物流查询地址和key

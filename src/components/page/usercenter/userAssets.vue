@@ -10,7 +10,7 @@
           <span class="fr" style="font-size: .24rem" @click.prvent="withdrawClicked">提现</span>
         </div>
         <div class="list">
-          <v-award-cell-datepiker :datetime="datetime" @choose="choose"></v-award-cell-datepiker>
+          <v-award-cell-datepiker   @choose="choose"></v-award-cell-datepiker>
           <div  v-for="(balanceLog,index) in balanceLogs" :key="index">
             <v-award-cell-header :items="balanceLog"></v-award-cell-header>
             <v-award-cell-line v-for="(item,keys) in balanceLog.OrderDetail" :key="keys" :datas="item" :index='index' :section='keys' @cellCliked="cellCliked"></v-award-cell-line>
@@ -40,8 +40,7 @@
         balanceDatail:'',
         balanceLogs:[],
         type:[],
-        datetime:{endDate:'2018-04',date:'2016-06'},
-        num:0,
+        datetime:{endDate:'',date:''},
         show:false
       }
     },
@@ -62,10 +61,6 @@
       getIsEntry (){
         // 判断是否登录 并获取session 和读取接口
         this.userInfos= isLogin(_readURL)
-        let date = new Date()
-        let month = date.getMonth()+1+''
-        month = month.length==1? '0'+month: month
-        this.datetime.endDate= this.datetime.date = date.getFullYear() + '-' + month
       },
       getType(){
         let url = this.userInfos.reqUrl
@@ -175,11 +170,8 @@
         })
       },
       choose(time){
-        if(this.num>1){
-          this.datetime.date = time
-          this.getBalanceLog(time)
-        }
-        this.num += 1
+        this.datetime.date = time
+        this.getBalanceLog(time)
       },
       cellCliked(index,key){
         let item = this.balanceLogs[index].OrderDetail[key]

@@ -1,23 +1,15 @@
 <template>
   <!-- 日期筛选-->
  <span class="timeDiv">
-     <yd-datetime v-model="datetime.date" slot="right" type="month" :end-date="datetime.endDate" :callback="choose"></yd-datetime>
+     <yd-datetime v-model="date" slot="right" type="month"  :callback="choose"></yd-datetime>
  </span>
 </template>
 
 <script>
     export default {
-      props: {
-        datetime: {
-          type:Object,
-          default: function () {
-            return {endDate:'2018-04',date:''}
-          }
-        }
-      },
       data () {
         return {
-
+          date:'2008-01'
         }
       },
       mounted: function () {
@@ -25,7 +17,13 @@
       },
       methods: {
         choose () {
-          this.$emit('choose',this.datetime.date)
+          if(this.date == '2008-01'){
+            let date = new Date()
+            let month = date.getMonth()+1+''
+            month = month.length==1? '0'+month: month
+            this.date = date.getFullYear() + '-' + month
+          }
+          this.$emit('choose',this.date)
         }
       }
     }
